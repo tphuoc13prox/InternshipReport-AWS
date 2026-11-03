@@ -11,21 +11,23 @@ chapter: false
 
 &emsp; **Full Name:** Phan Tan Phuoc
 
-&emsp; **Phone Number:** [TODO]
+&emsp; **Phone Number:** 0392840762
 
 &emsp; **Email:** phanphuoc9113@gmail.com
 
-&emsp; **University:** [TODO]
+&emsp; **University:** FPT University – Ho Chi Minh City Campus
 
-&emsp; **Major:** [TODO]
+&emsp; **Major:** Information Technology – Artificial Intelligence
 
-&emsp; **Internship Company:** Amazon Web Services Vietnam Co., Ltd.
+&emsp; **Class:** 
 
-&emsp; **Internship Position:** FCAJ Cloud Intern
+&emsp; **Internship Company:** Amazon Web Services Viet Nam Company Limited
 
-&emsp; **Internship Duration:** From [TODO] to [TODO]
+&emsp; **Internship Position:** Workforce Bootcamp - First Cloud AI Journey
 
-<!-- TODO: add avatar at static/images/avatar.jpg, then: ![Profile picture](/images/avatar.jpg) -->
+&emsp; **Internship Duration:** From 07/09/2026 to 12/12/2026
+
+![Profile picture](/images/avatar.jpg)
 
 ### Report Content
 

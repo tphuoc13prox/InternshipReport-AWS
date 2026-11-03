@@ -11,21 +11,23 @@ chapter: false
 
 &emsp; **Họ và tên:** Phan Tấn Phước
 
-&emsp; **Số điện thoại:** [TODO]
+&emsp; **Số điện thoại:** 0392840762
 
 &emsp; **Email:** phanphuoc9113@gmail.com
 
-&emsp; **Trường:** [TODO]
+&emsp; **Trường:** Đại học FPT – Cơ sở TP. Hồ Chí Minh
 
-&emsp; **Ngành:** [TODO]
+&emsp; **Ngành:** Công nghệ thông tin – Chuyên ngành Trí tuệ nhân tạo
 
-&emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Vietnam
+&emsp; **Lớp:** 
 
-&emsp; **Vị trí thực tập:** FCAJ Cloud Intern
+&emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Việt Nam
 
-&emsp; **Thời gian thực tập:** Từ ngày [TODO] đến ngày [TODO]
+&emsp; **Vị trí thực tập:** Workforce Bootcamp - First Cloud AI Journey
 
-<!-- TODO: thêm ảnh đại diện tại static/images/avatar.jpg, rồi: ![Ảnh đại diện](/images/avatar.jpg) -->
+&emsp; **Thời gian thực tập:** Từ ngày 07/09/2026 đến ngày 12/12/2026
+
+![Ảnh đại diện](/images/avatar.jpg)
 
 ### Nội dung báo cáo
 
