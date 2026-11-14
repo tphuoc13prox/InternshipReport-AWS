@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 4. </b> "
 ---
 
-During my internship, I participated in four events: a Buildathon kickoff with an AI Agent challenge, AWS Cloud and AI Day Hanoi, a fireside chat with Amazon's CTO Dr. Werner Vogels, and an Amazon volunteering activity.
+During my internship, I participated in five events: a Buildathon kickoff with an AI Agent challenge, AWS Cloud and AI Day Hanoi, a fireside chat with Amazon's CTO Dr. Werner Vogels, an Amazon volunteering activity, and FCAJ x FPTU: Cloud Mastery 1, a workshop on production AI and Amazon Bedrock AgentCore.
 
 ---
 
@@ -47,3 +47,13 @@ During my internship, I participated in four events: a Buildathon kickoff with a
 &emsp;**Format:** Hands-on volunteering activity  
 &emsp;**Content:** Prepared smart plush toys for children supported by Operation Smile Vietnam together with Amazon employees, using laptops and the materials provided.  
 &emsp;**Outcomes:** Saw how technology can be used for social good, and the value of user-centered design and teamwork.
+
+---
+
+### [Event 5 – FCAJ x FPTU: Cloud Mastery 1](4.5-Event5/)
+
+&emsp;**Event Name:** FCAJ x FPTU: Cloud Mastery 1  
+&emsp;**Role:** Attendee  
+&emsp;**Format:** In-person workshop with technical talks, enterprise case studies, Q&A and a mini quiz  
+&emsp;**Content:** Moving AI from prototype to production with the four pillars of security, scalability, reliability and cost; enterprise case studies from Cox Automotive and Mobileye; the Strands Agents SDK and the components of Amazon Bedrock AgentCore (Runtime, Identity, Gateway, Memory and Observability).  
+&emsp;**Outcomes:** A clearer understanding of what production-ready AI agents require on AWS, and concrete ideas for improving the security and monitoring of my team's chatbot.

@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 4. </b> "
 ---
 
-Trong thời gian thực tập, tôi đã tham gia bốn sự kiện: buổi khởi động Buildathon kèm thử thách AI Agent, AWS Cloud and AI Day Hanoi, buổi Fireside Chat với CTO của Amazon – Dr. Werner Vogels, và một hoạt động thiện nguyện của Amazon.
+Trong thời gian thực tập, tôi đã tham gia năm sự kiện: buổi khởi động Buildathon kèm thử thách AI Agent, AWS Cloud and AI Day Hanoi, buổi Fireside Chat với CTO của Amazon – Dr. Werner Vogels, một hoạt động thiện nguyện của Amazon, và FCAJ x FPTU: Cloud Mastery 1 – buổi workshop về AI trên production và Amazon Bedrock AgentCore.
 
 ---
 
@@ -47,3 +47,13 @@ Trong thời gian thực tập, tôi đã tham gia bốn sự kiện: buổi kh�
 &emsp;**Hình thức:** Hoạt động thiện nguyện thực hành  
 &emsp;**Nội dung:** Cùng nhân viên Amazon chuẩn bị thú bông thông minh cho các em nhỏ được Operation Smile Việt Nam hỗ trợ, sử dụng laptop và vật liệu được ban tổ chức cung cấp.  
 &emsp;**Kết quả:** Thấy được cách công nghệ có thể phục vụ lợi ích xã hội, cũng như giá trị của tư duy lấy người dùng làm trung tâm và tinh thần làm việc nhóm.
+
+---
+
+### [Sự kiện 5 – FCAJ x FPTU: Cloud Mastery 1](4.5-Event5/)
+
+&emsp;**Tên sự kiện:** FCAJ x FPTU: Cloud Mastery 1  
+&emsp;**Vai trò:** Người tham dự  
+&emsp;**Hình thức:** Workshop trực tiếp gồm các bài chia sẻ kỹ thuật, case study doanh nghiệp, hỏi đáp và mini quiz  
+&emsp;**Nội dung:** Đưa AI từ prototype lên production với bốn trụ cột bảo mật, khả năng mở rộng, độ tin cậy và chi phí; case study của Cox Automotive và Mobileye; Strands Agents SDK và các thành phần của Amazon Bedrock AgentCore (Runtime, Identity, Gateway, Memory và Observability).  
+&emsp;**Kết quả:** Hiểu rõ hơn những gì một AI agent cần có để chạy trên production với AWS, đồng thời có ý tưởng cụ thể để cải thiện bảo mật và khả năng giám sát cho chatbot của nhóm.
