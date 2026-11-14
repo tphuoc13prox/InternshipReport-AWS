@@ -1,23 +1,35 @@
 ---
 title: "Worklog"
-date: 2025-09-09
+date: 2026-09-14
 weight: 1
 chapter: false
 pre: " <b> 1. </b> "
 ---
 
-Daily worklog for 12 weeks of the internship (tasks, results, references).
+**On this page** I present my worklog for the AWS First Cloud AI Journey internship, from 14/09/2026 to 14/12/2026. Each week lists my objectives, the tasks I worked on each day with their references, and what I achieved. Besides the FCJ modules and labs, the worklog records my work on the team project **CPAWS - commodity price forecasting**, where I was responsible for the chatbot (the POST /chat Lambda with Amazon Bedrock) and the repository CI. Work done by other team members is only listed as team meetings or reviews.
 
-- [Week 1](1.1-Week1/): [TODO]
-- [Week 2](1.2-Week2/): [TODO]
-- [Week 3](1.3-Week3/): [TODO]
-- [Week 4](1.4-Week4/): [TODO]
-- [Week 5](1.5-Week5/): [TODO]
-- [Week 6](1.6-Week6/): [TODO]
-- [Week 7](1.7-Week7/): [TODO]
-- [Week 8](1.8-Week8/): [TODO]
-- [Week 9](1.9-Week9/): [TODO]
-- [Week 10](1.10-Week10/): [TODO]
-- [Week 11](1.11-Week11/): [TODO]
-- [Week 12](1.12-Week12/): [TODO]
+**Week 1:** [Onboarding, AWS Fundamentals & Account Setup](1.1-week1/)
 
+**Week 2:** [IAM, Amazon VPC & Site-to-Site VPN](1.2-week2/)
+
+**Week 3:** [Hybrid DNS, Multi-VPC Networking & Project Idea](1.3-week3/)
+
+**Week 4:** [Compute (EC2), AWS CLI, Storage & Project Repository](1.4-week4/)
+
+**Week 5:** [S3 Hosting, Security, Databases & Project CI](1.5-week5/)
+
+**Week 6:** [ElastiCache, High Availability & News Labeling with Bedrock](1.6-week6/)
+
+**Week 7:** [Serverless (Lambda, API Gateway, SAM) & Chatbot API](1.7-week7/)
+
+**Week 8:** [CI/CD, Infrastructure as Code (CloudFormation, CDK) & Chatbot Demo](1.8-week8/)
+
+**Week 9:** [Monitoring (Flow Logs, Grafana, CloudWatch) & Chatbot Defense Material](1.9-week9/)
+
+**Week 10:** [Machine Learning with SageMaker, Amazon Q & Workshop Writing](1.10-week10/)
+
+**Week 11:** [Review Compute, Storage, Security & Databases; Workshop](1.11-week11/)
+
+**Week 12:** [Review IaC & Monitoring; Final Presentation Preparation](1.12-week12/)
+
+**Week 13:** [Final Presentation, Clean-up & Wrap-up](1.13-week13/)
