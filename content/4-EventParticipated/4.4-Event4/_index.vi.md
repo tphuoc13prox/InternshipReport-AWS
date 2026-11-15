@@ -23,6 +23,7 @@ pre: " <b> 4.4. </b> "
 - **Thời gian:** 13:30 – 15:30
 - **Địa điểm:** Phòng EC2, tầng 36, văn phòng Amazon, TP. Hồ Chí Minh (diễn ra đồng thời tại văn phòng Hà Nội)
 - **Đơn vị tổ chức:** Amazon phối hợp với Operation Smile Việt Nam
+- **Vai trò:** Tình nguyện viên tham gia
 
 ### Nội dung nổi bật
 

@@ -31,6 +31,7 @@ pre: " <b> 4.5. </b> "
 - **Thời gian:** 09:00 – 12:00
 - **Địa điểm:** Tầng 26, Bitexco Financial Tower, TP. Hồ Chí Minh
 - **Đơn vị tổ chức:** AWS First Cloud AI Journey (FCAJ) và Trường Đại học FPT (FPTU)
+- **Vai trò:** Người tham dự
 
 ### Nội dung nổi bật
 

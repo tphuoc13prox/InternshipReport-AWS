@@ -31,6 +31,7 @@ pre: " <b> 4.5. </b> "
 - **Time:** 09:00 AM – 12:00 PM
 - **Venue:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City
 - **Organizers:** AWS First Cloud AI Journey (FCAJ) and FPT University (FPTU)
+- **Role:** Attendee
 
 ### Key Highlights
 

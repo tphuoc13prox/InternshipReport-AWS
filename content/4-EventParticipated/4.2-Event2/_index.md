@@ -32,6 +32,7 @@ pre: " <b> 4.2. </b> "
 - **Venue:** JW Marriott Hotel Hanoi
 - **Duration:** One-day in-person event
 - **Organizer:** Amazon Web Services (AWS)
+- **Role:** Attendee
 - **Registration:** Complimentary
 
 ### Key Highlights

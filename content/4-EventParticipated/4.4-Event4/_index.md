@@ -23,6 +23,7 @@ pre: " <b> 4.4. </b> "
 - **Time:** 01:30 PM – 03:30 PM
 - **Venue:** EC2 Room, 36th Floor, Amazon Office, Ho Chi Minh City (held at the same time at the Hanoi office)
 - **Organizers:** Amazon in collaboration with Operation Smile Vietnam
+- **Role:** Volunteer participant
 
 ### Key Highlights
 

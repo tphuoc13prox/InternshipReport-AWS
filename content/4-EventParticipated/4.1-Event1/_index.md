@@ -29,6 +29,7 @@ pre: " <b> 4.1. </b> "
 - **Time:** 09:00 AM – 12:00 PM
 - **Venue:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City
 - **Organizers:** AWS First Cloud Journey (FCAJ) and CMC Global
+- **Role:** Attendee
 
 ### Key Highlights
 

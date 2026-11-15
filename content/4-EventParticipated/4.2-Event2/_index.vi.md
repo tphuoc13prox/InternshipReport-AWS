@@ -32,6 +32,7 @@ pre: " <b> 4.2. </b> "
 - **Địa điểm:** Khách sạn JW Marriott Hà Nội
 - **Thời lượng:** Sự kiện trực tiếp trong một ngày
 - **Đơn vị tổ chức:** Amazon Web Services (AWS)
+- **Vai trò:** Người tham dự
 - **Đăng ký:** Miễn phí
 
 ### Nội dung nổi bật

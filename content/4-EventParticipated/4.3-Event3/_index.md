@@ -27,6 +27,7 @@ pre: " <b> 4.3. </b> "
 - **Time:** 08:30 AM – 12:00 PM
 - **Venue:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City
 - **Organizers:** AWS First Cloud Journey × Amazon
+- **Role:** Attendee
 
 ### Key Highlights
 
