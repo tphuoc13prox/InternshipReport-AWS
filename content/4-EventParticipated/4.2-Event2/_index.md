@@ -69,6 +69,8 @@ Participating in AWS Cloud and AI Day Hanoi provided valuable exposure to curren
 
 ### Some Event Photos
 
+![Event 2 – my check-in at AWS Cloud and AI Day Hanoi](/images/4-Event/event2_checkin.jpg)
+
 ![Event 2 – photo 1](/images/4-Event/event2_img1.jpg)
 
 ![Event 2 – photo 2](/images/4-Event/event2_img2.jpg)

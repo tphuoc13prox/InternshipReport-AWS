@@ -69,6 +69,8 @@ Tham gia AWS Cloud and AI Day Hanoi giúp tôi tiếp cận những phát triể
 
 ### Một số hình ảnh sự kiện
 
+![Sự kiện 2 – ảnh check-in của tôi tại AWS Cloud and AI Day Hanoi](/images/4-Event/event2_checkin.jpg)
+
 ![Sự kiện 2 – ảnh 1](/images/4-Event/event2_img1.jpg)
 
 ![Sự kiện 2 – ảnh 2](/images/4-Event/event2_img2.jpg)
