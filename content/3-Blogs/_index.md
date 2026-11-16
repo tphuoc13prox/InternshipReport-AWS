@@ -14,5 +14,10 @@ An original post inspired by the "AgentCore Memory" slide at FCAJ x FPTU: Cloud 
 
 Published by Phan Tấn Phước on November 14, 2026: [original post on AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2337675363664089/)
 
-- Blog 2: [TODO title + link]
+### [Blog 2 - Tool Use with the Bedrock Converse API: The Model Called the Right Tool, So Why Is the Answer Still Wrong?](3.2-Blog2/)
+
+An original post drawn from my experience building a chatbot on Amazon Bedrock, illustrated with a weather-chatbot example. It explains the five-step client-side tool use loop of the Converse API (`toolUse` → run the tool → `toolResult` → repeat until `end_turn`), the "brakes" a production loop needs (round limit, a deadline under the API Gateway timeout, handling every `stopReason`), structured tool errors, and why tool output should be designed for the model to read, ending with a checklist.
+
+Published by Phan Tấn Phước on November 16, 2026: [original post on AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2339395856825373/)
+
 - Blog 3: [TODO title + link]

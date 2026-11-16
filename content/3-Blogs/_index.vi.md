@@ -14,5 +14,10 @@ Bài tự viết, lấy ý tưởng từ slide "AgentCore Memory" tại sự ki�
 
 Phan Tấn Phước đăng ngày 14/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2337675363664089/)
 
-- Blog 2: [TODO tiêu đề + link]
+### [Blog 2 - Tool use với Bedrock Converse API: Model gọi đúng tool rồi, sao vẫn trả lời sai?](3.2-Blog2/)
+
+Bài tự viết, rút ra từ kinh nghiệm làm chatbot trên Amazon Bedrock, minh họa bằng ví dụ chatbot thời tiết. Bài giải thích vòng lặp tool use 5 bước của Converse API (`toolUse` → chạy tool → `toolResult` → lặp tới `end_turn`), các "phanh" cần có khi chạy thật (giới hạn số vòng, hạn chót dưới timeout của API Gateway, xử lý mọi `stopReason`), cách báo lỗi tool có cấu trúc, và vì sao phải thiết kế output của tool cho model dễ đọc đúng, kèm checklist.
+
+Phan Tấn Phước đăng ngày 16/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2339395856825373/)
+
 - Blog 3: [TODO tiêu đề + link]
