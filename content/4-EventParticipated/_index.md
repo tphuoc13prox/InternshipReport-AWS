@@ -13,6 +13,8 @@ During my internship, I participated in five events: a Buildathon kickoff with a
 ### [Event 1 – Buildrathon Kickoff: Code the Future with CMC Global](4.1-Event1/)
 
 &emsp;**Event Name:** Buildrathon Kickoff: Code the Future with CMC Global  
+&emsp;**Date & Time:** 09:00 AM – 12:00 PM, September 26, 2026  
+&emsp;**Location:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City  
 &emsp;**Role:** Attendee  
 &emsp;**Format:** Kickoff event with talks, networking and a hands-on AI Agent challenge  
 &emsp;**Content:** Introduction to the Buildathon challenge, AWS Cloud, Generative AI and AI Agent development, career talks on Cloud and AI, and a hands-on mini challenge covering prompt engineering, RAG and knowledge bases.  
@@ -23,6 +25,8 @@ During my internship, I participated in five events: a Buildathon kickoff with a
 ### [Event 2 – AWS Cloud and AI Day Hanoi](4.2-Event2/)
 
 &emsp;**Event Name:** AWS Cloud and AI Day Hanoi  
+&emsp;**Date & Time:** Full day, September 29, 2026  
+&emsp;**Location:** JW Marriott Hotel Hanoi  
 &emsp;**Role:** Attendee  
 &emsp;**Format:** One-day in-person conference (keynotes, technical sessions, workshops and expo)  
 &emsp;**Content:** Keynotes from AWS, government and industry leaders; technical sessions on AI, data and analytics, cloud migration and modern application development; agentic AI and the 8-Bit Agents activation.  
@@ -33,6 +37,8 @@ During my internship, I participated in five events: a Buildathon kickoff with a
 ### [Event 3 – Fireside Chat with Dr. Werner: Navigating the Future of Cloud & AI in Vietnam](4.3-Event3/)
 
 &emsp;**Event Name:** Fireside Chat with Dr. Werner: Navigating the Future of Cloud & AI in Vietnam  
+&emsp;**Date & Time:** 08:30 AM – 12:00 PM, October 2, 2026  
+&emsp;**Location:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City  
 &emsp;**Role:** Attendee  
 &emsp;**Format:** Fireside chat  
 &emsp;**Content:** Dr. Werner Vogels shared lessons from Amazon's operations, including the database outage that led to Dynamo and DynamoDB, four principles of operational excellence, the "Renaissance Developer" and the role of AI as a catalyst for engineers.  
@@ -43,6 +49,8 @@ During my internship, I participated in five events: a Buildathon kickoff with a
 ### [Event 4 – Smart Plushies for Children](4.4-Event4/)
 
 &emsp;**Event Name:** Smart Plushies for Children – Amazon Volunteering Event  
+&emsp;**Date & Time:** 01:30 PM – 03:30 PM, October 26, 2026  
+&emsp;**Location:** EC2 Room, 36th Floor, Amazon Office, Ho Chi Minh City  
 &emsp;**Role:** Volunteer  
 &emsp;**Format:** Hands-on volunteering activity  
 &emsp;**Content:** Prepared smart plush toys for children supported by Operation Smile Vietnam together with Amazon employees, using laptops and the materials provided.  
@@ -53,6 +61,8 @@ During my internship, I participated in five events: a Buildathon kickoff with a
 ### [Event 5 – FCAJ x FPTU: Cloud Mastery 1](4.5-Event5/)
 
 &emsp;**Event Name:** FCAJ x FPTU: Cloud Mastery 1  
+&emsp;**Date & Time:** 09:00 AM – 12:00 PM, November 14, 2026  
+&emsp;**Location:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City  
 &emsp;**Role:** Attendee  
 &emsp;**Format:** In-person workshop with technical talks, enterprise case studies, Q&A and a mini quiz  
 &emsp;**Content:** Moving AI from prototype to production with the four pillars of security, scalability, reliability and cost; enterprise case studies from Cox Automotive and Mobileye; the Strands Agents SDK and the components of Amazon Bedrock AgentCore (Runtime, Identity, Gateway, Memory and Observability).  
