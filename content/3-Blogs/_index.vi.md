@@ -20,4 +20,8 @@ Bài tự viết, rút ra từ kinh nghiệm làm chatbot trên Amazon Bedrock, 
 
 Phan Tấn Phước đăng ngày 16/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2339395856825373/)
 
-- Blog 3: [TODO tiêu đề + link]
+### [Blog 3 - Prompt caching cho chatbot có tool use: Đặt cachePoint đúng chỗ để giảm tới ~90% chi phí phần prompt lặp lại trên Amazon Bedrock](3.3-Blog3/)
+
+Bài tự viết, tổng hợp từ tài liệu AWS, các con số là ví dụ minh họa. Bài giải thích prompt caching trong Converse API (`cachePoint` ở tools, system, messages; giá ghi và đọc cache; TTL), ước tính mức tiết kiệm cho phần lặp lại trong vòng lặp tool use, và đề xuất cách sắp xếp prompt để cache thật sự trúng (tĩnh trước, động sau; danh sách tool ổn định; mốc cache di động ở cuối message mới nhất), kèm các bẫy (ngưỡng token tối thiểu, không đảm bảo trúng) và cách đo tỉ lệ trúng.
+
+Phan Tấn Phước đăng ngày 17/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2340410270057265/)

@@ -20,4 +20,8 @@ An original post drawn from my experience building a chatbot on Amazon Bedrock, 
 
 Published by Phan Tấn Phước on November 16, 2026: [original post on AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2339395856825373/)
 
-- Blog 3: [TODO title + link]
+### [Blog 3 - Prompt Caching for Chatbots with Tool Use: Place cachePoint in the Right Spot to Cut Up to ~90% of the Cost of Repeated Prompt Content on Amazon Bedrock](3.3-Blog3/)
+
+An original post compiled from the AWS documentation, with illustrative numbers. It explains how prompt caching works in the Converse API (`cachePoint` in tools, system, and messages; cache write and cache read prices; TTL), estimates the savings for the repeated part of a tool use loop, and proposes how to arrange the prompt so the cache actually hits (static first, dynamic last; a stable tool list; a moving checkpoint at the end of the latest message), along with the pitfalls (minimum token threshold, hits not guaranteed) and how to measure the hit rate.
+
+Published by Phan Tấn Phước on November 17, 2026: [original post on AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2340410270057265/)
