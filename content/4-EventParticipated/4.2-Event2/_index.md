@@ -18,7 +18,7 @@ pre: " <b> 4.2. </b> "
 
 ### Keynote Speakers
 
-- **H.E. Pham Duc Long – Deputy Minister of Science & Technology**
+- **H.E. Hoang Minh – Deputy Minister of Science & Technology**
 - **H.E. Jennifer Wicks – U.S. Ambassador to Vietnam**
 - **Dr. Werner Vogels – CTO, Amazon.com**
 - **Eric Yeo – Country General Manager Malaysia, Vietnam, Indochina, AWS**

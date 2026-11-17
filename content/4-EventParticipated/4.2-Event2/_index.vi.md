@@ -18,7 +18,7 @@ pre: " <b> 4.2. </b> "
 
 ### Diễn giả chính
 
-- **H.E. Pham Duc Long – Thứ trưởng Bộ Khoa học và Công nghệ**
+- **H.E. Hoang Minh – Thứ trưởng Bộ Khoa học và Công nghệ**
 - **H.E. Jennifer Wicks – Đại sứ Hoa Kỳ tại Việt Nam**
 - **Dr. Werner Vogels – CTO, Amazon.com**
 - **Eric Yeo – Tổng Giám đốc khu vực Malaysia, Việt Nam và Đông Dương, AWS**
