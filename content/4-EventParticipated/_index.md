@@ -22,14 +22,14 @@ During my internship, I participated in five events: a Buildathon kickoff with a
 
 ---
 
-### [Event 2 – AWS Cloud and AI Day Hanoi](4.2-Event2/)
+### [Event 2 – AWS Cloud and AI Day Hanoi – Watch Party](4.2-Event2/)
 
-&emsp;**Event Name:** AWS Cloud and AI Day Hanoi  
-&emsp;**Date & Time:** Full day, September 29, 2026  
-&emsp;**Location:** JW Marriott Hotel Hanoi  
+&emsp;**Event Name:** AWS Cloud and AI Day Hanoi – Watch Party: Ho Chi Minh City  
+&emsp;**Date & Time:** September 29, 2026  
+&emsp;**Location:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City  
 &emsp;**Role:** Attendee  
-&emsp;**Format:** One-day in-person conference (keynotes, technical sessions, workshops and expo)  
-&emsp;**Content:** Keynotes from AWS, government and industry leaders; technical sessions on AI, data and analytics, cloud migration and modern application development; agentic AI and the 8-Bit Agents activation.  
+&emsp;**Format:** Watch party: following the Hanoi event live from Ho Chi Minh City  
+&emsp;**Content:** Keynotes from AWS, government and industry leaders; technical sessions on AI, data and analytics, cloud migration and modern application development; agentic AI.  
 &emsp;**Outcomes:** A clearer picture of how cloud and AI are combined in real-world applications and how AI agents can be built and deployed on AWS.
 
 ---

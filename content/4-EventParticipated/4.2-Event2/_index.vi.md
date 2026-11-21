@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 4.2. </b> "
 ---
 
-# Báo Cáo Tóm Tắt: "AWS Cloud and AI Day Hanoi"
+# Báo Cáo Tóm Tắt: "AWS Cloud and AI Day Hanoi – Watch Party: Ho Chi Minh City"
 
 ### Mục tiêu sự kiện
 
@@ -27,10 +27,10 @@ pre: " <b> 4.2. </b> "
 
 ### Thông tin sự kiện
 
-- **Sự kiện:** AWS Cloud and AI Day Hanoi
+- **Sự kiện:** AWS Cloud and AI Day Hanoi – Watch Party: Ho Chi Minh City
 - **Ngày:** 29/09/2026
-- **Địa điểm:** Khách sạn JW Marriott Hà Nội
-- **Thời lượng:** Sự kiện trực tiếp trong một ngày
+- **Địa điểm:** Tầng 26, Tòa nhà Bitexco Financial Tower, TP.HCM
+- **Hình thức:** Watch party: theo dõi trực tiếp sự kiện tại Hà Nội từ điểm cầu TP.HCM
 - **Đơn vị tổ chức:** Amazon Web Services (AWS)
 - **Vai trò:** Người tham dự
 - **Đăng ký:** Miễn phí
@@ -40,11 +40,7 @@ pre: " <b> 4.2. </b> "
 - **Keynote:** Tìm hiểu cách các công nghệ AWS và hệ thống agentic giúp lập trình viên biến ý tưởng thành giải pháp thực tế.
 - **Các phiên kỹ thuật:** Các phiên về AI, dữ liệu và phân tích, cloud migration và phát triển ứng dụng hiện đại.
 - **Agentic AI:** Tìm hiểu việc phát triển và triển khai AI agent cho các ứng dụng thực tế.
-- **Workshop thực hành:** Cơ hội trải nghiệm thực tế với các công nghệ AWS Cloud.
-- **Expo:** Các phần trình diễn kỹ thuật và gian trưng bày tương tác của AWS và các đối tác.
-- **Developer Community Zone:** Không gian kết nối với các lập trình viên khác và thành viên cộng đồng AWS.
-- **Startup Zone:** Trình diễn giải pháp từ các khách hàng startup của AWS trong các lĩnh vực như FinTech, AI và Commerce.
-- **8-Bit Agents Activation:** Hoạt động tương tác tập trung vào việc xây dựng và triển khai AI agent.
+- **Watch party tại TP.HCM:** Cùng các bạn thực tập sinh FCAJ theo dõi livestream tại văn phòng AWS.
 
 ### Bài học rút ra
 
@@ -66,11 +62,11 @@ Kiến thức từ sự kiện có thể được áp dụng vào các dự án 
 
 ### Trải nghiệm sự kiện
 
-Tham gia AWS Cloud and AI Day Hanoi giúp tôi tiếp cận những phát triển mới nhất trong điện toán đám mây và trí tuệ nhân tạo. Sự kiện kết nối kiến thức kỹ thuật với ứng dụng thực tế thông qua các bài keynote, phiên kỹ thuật, phần trình diễn, workshop và các buổi trao đổi với chuyên gia AWS cùng đối tác công nghệ. Các phiên về AI và hệ thống agentic đặc biệt phù hợp với xuất phát điểm của tôi là một sinh viên AI, và giúp tôi hiểu rõ hơn cách phát triển và triển khai giải pháp AI trên hạ tầng cloud.
+Theo dõi trực tiếp AWS Cloud and AI Day Hanoi tại buổi watch party ở TP.HCM giúp tôi tiếp cận những phát triển mới nhất trong điện toán đám mây và trí tuệ nhân tạo. Cùng các bạn thực tập sinh FCAJ xem các bài keynote và phiên kỹ thuật, tôi thấy rõ hơn cách kiến thức kỹ thuật gắn với ứng dụng thực tế. Các phiên về AI và hệ thống agentic đặc biệt phù hợp với xuất phát điểm của tôi là một sinh viên AI, và giúp tôi hiểu rõ hơn cách phát triển và triển khai giải pháp AI trên hạ tầng cloud.
 
 ### Một số hình ảnh sự kiện
 
-![Sự kiện 2 – ảnh check-in của tôi tại AWS Cloud and AI Day Hanoi](/images/4-Event/event2_checkin.jpg)
+![Sự kiện 2 – ảnh check-in của tôi tại buổi watch party AWS Cloud and AI Day Hanoi ở TP.HCM](/images/4-Event/event2_checkin.jpg)
 
 ![Sự kiện 2 – ảnh 1](/images/4-Event/event2_img1.jpg)
 

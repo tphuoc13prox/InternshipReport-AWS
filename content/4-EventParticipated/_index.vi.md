@@ -22,14 +22,14 @@ Trong thời gian thực tập, tôi đã tham gia năm sự kiện: buổi kh�
 
 ---
 
-### [Sự kiện 2 – AWS Cloud and AI Day Hanoi](4.2-Event2/)
+### [Sự kiện 2 – AWS Cloud and AI Day Hanoi – Watch Party](4.2-Event2/)
 
-&emsp;**Tên sự kiện:** AWS Cloud and AI Day Hanoi  
-&emsp;**Thời gian:** Cả ngày 29/09/2026  
-&emsp;**Địa điểm:** Khách sạn JW Marriott Hà Nội  
+&emsp;**Tên sự kiện:** AWS Cloud and AI Day Hanoi – Watch Party: Ho Chi Minh City  
+&emsp;**Thời gian:** 29/09/2026  
+&emsp;**Địa điểm:** Tầng 26, Tòa nhà Bitexco Financial Tower, TP.HCM  
 &emsp;**Vai trò trong sự kiện:** Người tham dự  
-&emsp;**Hình thức:** Hội nghị trực tiếp trong một ngày (keynote, phiên kỹ thuật, workshop và khu trưng bày)  
-&emsp;**Nội dung:** Các bài keynote của lãnh đạo AWS, cơ quan nhà nước và doanh nghiệp; các phiên kỹ thuật về AI, dữ liệu và phân tích, cloud migration và phát triển ứng dụng hiện đại; agentic AI và hoạt động 8-Bit Agents Activation.  
+&emsp;**Hình thức:** Watch party: theo dõi trực tiếp sự kiện tại Hà Nội từ điểm cầu TP.HCM  
+&emsp;**Nội dung:** Các bài keynote của lãnh đạo AWS, cơ quan nhà nước và doanh nghiệp; các phiên kỹ thuật về AI, dữ liệu và phân tích, cloud migration và phát triển ứng dụng hiện đại; agentic AI.  
 &emsp;**Kết quả:** Hiểu rõ hơn cách cloud và AI được kết hợp trong các ứng dụng thực tế, cũng như cách xây dựng và triển khai AI agent trên AWS.
 
 ---

@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 4.2. </b> "
 ---
 
-# Summary Report: "AWS Cloud and AI Day Hanoi"
+# Summary Report: "AWS Cloud and AI Day Hanoi – Watch Party: Ho Chi Minh City"
 
 ### Event Objectives
 
@@ -27,10 +27,10 @@ pre: " <b> 4.2. </b> "
 
 ### Event Information
 
-- **Event:** AWS Cloud and AI Day Hanoi
+- **Event:** AWS Cloud and AI Day Hanoi – Watch Party: Ho Chi Minh City
 - **Date:** September 29, 2026
-- **Venue:** JW Marriott Hotel Hanoi
-- **Duration:** One-day in-person event
+- **Venue:** 26th Floor, Bitexco Financial Tower, Ho Chi Minh City
+- **Format:** Watch party: following the Hanoi event live from the Ho Chi Minh City venue
 - **Organizer:** Amazon Web Services (AWS)
 - **Role:** Attendee
 - **Registration:** Complimentary
@@ -40,11 +40,7 @@ pre: " <b> 4.2. </b> "
 - **Keynote Session:** Exploring how AWS technologies and agentic systems can help developers turn ideas into practical solutions.
 - **Technical Sessions:** Sessions covering AI, data and analytics, cloud migration, and modern application development.
 - **Agentic AI:** Exploring the development and deployment of AI agents for practical applications.
-- **Hands-on Workshops:** Opportunities to gain practical experience with AWS Cloud technologies.
-- **Expo:** Technical demonstrations and interactive showcases from AWS and its partners.
-- **Developer Community Zone:** Opportunities to connect with other developers and members of the AWS community.
-- **Startup Zone:** Demonstrations and solutions from AWS startup customers working on areas such as FinTech, AI, and Commerce.
-- **8-Bit Agents Activation:** An interactive activity focused on building and deploying AI agents.
+- **Watch party in Ho Chi Minh City:** Following the livestream together with other FCAJ interns at the AWS office.
 
 ### Key Takeaways
 
@@ -66,11 +62,11 @@ The knowledge gained from the event can be applied to future AWS and AI projects
 
 ### Event Experience
 
-Participating in AWS Cloud and AI Day Hanoi provided valuable exposure to current developments in cloud computing and artificial intelligence. The event connected technical knowledge with real-world applications through keynote presentations, technical sessions, demonstrations, workshops, and discussions with AWS experts and technology partners. The sessions on AI and agentic systems were particularly relevant to my background as an AI student and helped me better understand how AI solutions can be developed and deployed using cloud infrastructure.
+Following AWS Cloud and AI Day Hanoi live from the watch party in Ho Chi Minh City provided valuable exposure to current developments in cloud computing and artificial intelligence. Watching the keynotes and technical sessions together with other FCAJ interns showed how technical knowledge connects with real-world applications. The sessions on AI and agentic systems were particularly relevant to my background as an AI student and helped me better understand how AI solutions can be developed and deployed using cloud infrastructure.
 
 ### Some Event Photos
 
-![Event 2 – my check-in at AWS Cloud and AI Day Hanoi](/images/4-Event/event2_checkin.jpg)
+![Event 2 – my check-in at the AWS Cloud and AI Day Hanoi watch party in Ho Chi Minh City](/images/4-Event/event2_checkin.jpg)
 
 ![Event 2 – photo 1](/images/4-Event/event2_img1.jpg)
 
