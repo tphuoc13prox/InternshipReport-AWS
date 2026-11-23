@@ -8,21 +8,25 @@ pre: " <b> 1.11. </b> "
 ---
 
 ### Mục tiêu tuần 11:
-- Ôn lại Module 03-06 và làm lại các lab chính.
-- Hoàn thành phần Workshop của báo cáo.
-- Cùng nhóm tập dượt phần chatbot cho buổi thuyết trình cuối kỳ.
+- Cập nhật báo cáo theo thông báo FCAJ ngày 23/11 và viết phần Tự đánh giá, Góp ý.
+- Ôn lại Module 03-06, các lab IaC, giám sát và serverless.
+- Rà soát phần Workshop chung của nhóm và toàn bộ báo cáo.
+- Dọn dẹp tài nguyên lab cá nhân và kiểm tra chi phí.
+- Kiểm tra chatbot sau khi nhóm phát hành v1.0.0.
 
 ### Các công việc cần triển khai trong tuần này:
 
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
 |:---:|---|:---:|:---:|---|
-| 2 | **- Ôn tập: Module 03-04 (EC2, lưu trữ) (dự kiến)**<br>+ Xem lại Module 03-04, làm lại lab EC2 và lab website tĩnh trên S3 | 23/11/2026 | 23/11/2026 | [EC2 Lab](https://000004.awsfcaj.com/vi/)<br>[S3 Lab](https://000057.awsfcaj.com/vi/) |
-| 3 | **- Ôn tập: Module 05-06 (bảo mật, cơ sở dữ liệu) (dự kiến)**<br>+ Xem lại Module 05-06, làm lại lab RDS | 24/11/2026 | 24/11/2026 | [RDS Lab](https://000005.awsfcaj.com/vi/) |
-| 4 | **- Báo cáo: hoàn thành phần Workshop (dự kiến)**<br>+ Bổ sung các bước kiểm thử và dọn dẹp, chạy lại từng bước trên tài khoản mới | 25/11/2026 | 25/11/2026 |  |
-| 5 | **- Họp nhóm: tập dượt buổi thuyết trình cuối kỳ (dự kiến)**<br>+ Chạy thử slide chatbot và kịch bản hỏi đáp cùng nhóm | 26/11/2026 | 26/11/2026 |  |
-| 6 | **- Ôn tập: các lab serverless (dự kiến)**<br>+ Làm lại luồng Lambda + API Gateway + DynamoDB, so sánh với Lambda chatbot | 27/11/2026 | 27/11/2026 | [API GW Lab](https://000079.awsfcaj.com/vi/) |
+| 2 | **- Báo cáo: cập nhật theo thông báo FCAJ ngày 23/11**<br>+ Proposal, Workshop và Blog là phần chung của nhóm: chuyển sang dùng bản chung của nhóm<br>+ Worklog dừng ở ngày nộp 30/11/2026<br>**- Báo cáo: viết phần Tự đánh giá và Góp ý**<br>**- Dự án nhóm: kiểm tra chatbot sau khi nhóm phát hành v1.0.0**<br>+ Hỏi trên web 1 câu dự báo giá vàng 7 phiên và 1 câu về tin gần đây (đều đạt)<br>+ Kiểm tra khung chat ở giao diện sáng/tối, trên desktop và mobile<br>+ Review phần chatbot của PR #146 (chatbot biết ngày giờ hiện tại theo giờ Việt Nam), approve kèm 3 góp ý nhỏ<br>+ Đọc PR #145 (web v1.0.1, lưu lịch sử chat theo phiên) | 23/11/2026 | 23/11/2026 | [FCAJ HCM Rules](https://hcm-rules.awsfcaj.com/) |
+| 3 | **- Ôn tập: Module 03-06 (EC2, lưu trữ, bảo mật, cơ sở dữ liệu) (dự kiến)**<br>+ Xem lại Module 03-06, làm lại lab EC2 và lab website tĩnh trên S3 | 24/11/2026 | 24/11/2026 | [EC2 Lab](https://000004.awsfcaj.com/vi/)<br>[S3 Lab](https://000057.awsfcaj.com/vi/) |
+| 4 | **- Báo cáo: rà soát và cập nhật phần Workshop chung của nhóm vào báo cáo (dự kiến)**<br>+ Đối chiếu với template workshop của FCAJ<br>+ Kiểm tra phần chatbot (Lambda /chat + Bedrock) khớp với hệ thống đang chạy | 25/11/2026 | 25/11/2026 | [Workshop Sample](https://workshop-sample.awsfcaj.com/) |
+| 5 | **- Ôn tập: các lab IaC, giám sát và serverless (dự kiến)**<br>+ Làm lại lab CDK, đối chiếu với các CDK stack của nhóm<br>+ Xem lại CloudWatch workshop và luồng Lambda + API Gateway | 26/11/2026 | 26/11/2026 | [CDK Lab](https://000038.awsfcaj.com/vi/)<br>[CloudWatch Lab](https://000036.awsfcaj.com/vi/) |
+| 6 | **- Dọn dẹp tài nguyên lab cá nhân (dự kiến)**<br>+ Xóa các tài nguyên lab cá nhân còn chạy, kiểm tra AWS Budgets và Cost Explorer<br>+ Hệ thống CPAWS của nhóm vẫn giữ chạy tới hết đợt chấm<br>**- Báo cáo: rà soát toàn bộ báo cáo (dự kiến)**<br>+ Thay các việc dự kiến bằng việc đã làm thật | 27/11/2026 | 27/11/2026 | [AWS Budgets Lab](https://000007.awsfcaj.com/vi/) |
 
 ### Kết quả đạt được tuần 11:
-1. Dự kiến: ôn xong các module compute, lưu trữ, bảo mật và cơ sở dữ liệu.
-2. Dự kiến: hoàn thành phần Workshop và kiểm tra lại từng bước.
-3. Dự kiến: tập dượt lần đầu phần chatbot của buổi thuyết trình.
+1. Cập nhật báo cáo theo thông báo FCAJ ngày 23/11 (Proposal, Workshop, Blog dùng bản chung của nhóm; Worklog dừng ở 30/11) và viết phần Tự đánh giá, Góp ý.
+2. Kiểm tra chatbot sau khi nhóm phát hành v1.0.0 (câu hỏi dự báo và câu hỏi về tin gần đây đều đạt, khung chat hiển thị đúng trên desktop và mobile); review phần chatbot của PR #146.
+3. Dự kiến: ôn xong Module 03-06 và các lab IaC, giám sát, serverless.
+4. Dự kiến: rà soát xong phần Workshop chung của nhóm và toàn bộ báo cáo.
+5. Dự kiến: dọn dẹp tài nguyên lab cá nhân và kiểm tra chi phí; hệ thống CPAWS vẫn chạy cho đợt chấm.
