@@ -1,101 +1,108 @@
 ---
 title: "Blog 3"
-date: 2026-11-17
+date: 2026-11-15
 weight: 3
 chapter: false
 pre: " <b> 3.3. </b> "
 ---
 
-# Prompt caching cho chatbot có tool use: Đặt cachePoint đúng chỗ để giảm tới ~90% chi phí phần prompt lặp lại trên Amazon Bedrock
+# Mô hình chỉ chạy vài giây mỗi ngày: Có cần đến SageMaker Endpoint không?
 
-bởi Phan Tấn Phước | ngày 17/11/2026 | đăng tại [AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/) | [Bài gốc trên Facebook](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2340410270057265/)
+bởi Trịnh Tiến Khải | ngày 15/11/2026 | đăng tại [AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/) | [Bài gốc trên Facebook](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2338607513570874/)
 
-*Bài tự viết, tổng hợp từ tài liệu AWS; các con số trong bài là ví dụ minh họa. Nội dung dưới đây giữ đúng câu chữ của bài đã đăng, chỉ trình bày lại bằng markdown.*
+*Bài của thành viên nhóm Trịnh Tiến Khải. Nội dung dưới đây giữ đúng câu chữ của bài đã đăng, chỉ trình bày lại bằng markdown và ghi đầy đủ đường dẫn của tài liệu tham khảo.*
 
-Ở bài trước về tool use với Converse API, mình có nhắc: Converse không lưu hội thoại giúp bạn, nên mỗi vòng tool là một lần gọi model và phải gửi lại toàn bộ định nghĩa tool, system prompt và lịch sử. Một câu hỏi cần 2 vòng tool là 3 lần gọi, và phần "giống hệt nhau" đó bị tính tiền 3 lần. Prompt caching là cách để trả tiền phần lặp lại đó rẻ hơn nhiều, đồng thời giảm độ trễ. Bài này mình tổng hợp theo tài liệu AWS, kèm cách sắp xếp prompt để cache thật sự "trúng". Các con số trong bài là ví dụ minh họa, sơ đồ ở Hình 1.
+Gần đây mình tìm hiểu các cách chạy inference cho mô hình học máy trên AWS, và phát hiện một điều khá thú vị: với nhiều bài toán, câu hỏi quan trọng nhất không phải "mô hình gì" mà là "mô hình được gọi như thế nào". Bài này mình ghi lại những gì đọc được, kèm một sơ đồ ví dụ có đánh số từng luồng (ảnh đính kèm) để dễ theo dõi.
 
-### 1. Prompt caching hoạt động thế nào?
+**Tình huống:** một cửa hàng online muốn dự báo số đơn hàng ngày mai cho từng kho. Mỗi đêm chạy một lần sau khi chốt dữ liệu trong ngày, mô hình chạy vài giây, kết quả ghi vào database để dashboard đọc lại. Không ai cần mô hình trả lời theo từng cú click.
 
-Bedrock cache theo tiền tố (prefix) của prompt. Bạn đặt các mốc cache (cache checkpoint) bằng khối `cachePoint`, phần nội dung đứng trước mốc được lưu lại; request sau có cùng tiền tố đó sẽ đọc từ cache thay vì xử lý lại.
+Phản xạ đầu tiên thường là "mô hình học máy thì lên SageMaker endpoint". Nhưng khi đọc kỹ cách tính tiền, mình thấy lựa chọn này không hợp với kiểu workload trên.
 
-- Có 2 kiểu: implicit (Bedrock tự thử dùng lại tiền tố, không cần cấu hình, nhưng chỉ là best effort) và explicit (bạn tự đặt `cachePoint`). Với Claude trên Bedrock, phải dùng explicit: request không có cache control thì không được cache.
-- Trong Converse, `cachePoint` đặt được ở 3 chỗ: `tools`, `system` và `messages`. Thứ tự xử lý là tools → system → messages, và chúng nối tiếp nhau: sửa phần tools thì cache của system và messages phía sau cũng mất.
-- Claude cho tối đa 4 mốc cache mỗi request.
-- Cache có TTL, mặc định 5 phút và được làm mới mỗi lần đọc trúng. Một số model hỗ trợ TTL 1 giờ (`"ttl": "1h"`).
+### 1. Bốn cách chạy inference trên SageMaker
 
-Cú pháp rất ngắn, chỉ là thêm một khối vào sau phần muốn cache:
+- **Real-time endpoint:** tính tiền theo giờ instance trong suốt thời gian endpoint còn chạy, kể cả khi không có request nào. Hợp khi cần độ trễ thấp, lưu lượng đều, hoặc cần GPU.
+- **Serverless Inference:** tự về 0 khi rảnh, đổi lại có cold start. Bộ nhớ chọn từ 1 GB đến 6 GB và không có GPU.
+- **Asynchronous Inference:** request được đưa vào hàng đợi, hợp với payload lớn hoặc thời gian xử lý dài.
+- **Batch Transform:** chạy theo lô trên cả tập dữ liệu, xong thì tắt.
 
-```json
-{"cachePoint": {"type": "default"}}
+Với job vài giây mỗi ngày, real-time endpoint gần như là trả tiền cho máy ngồi chờ. Batch Transform hay Serverless Inference dùng được, nhưng nếu mô hình nhỏ và chạy được bằng CPU thì còn một lựa chọn gọn hơn: AWS Lambda.
+
+### 2. Vì sao là Lambda container image, không phải gói zip
+
+- Gói zip của Lambda giới hạn 250 MB sau khi giải nén (tính cả layer). Bộ thư viện dữ liệu như pandas, pyarrow, scikit-learn cộng lại rất dễ chạm trần.
+- Container image cho phép tới 10 GB (chưa nén, tính cả các layer).
+- Timeout tối đa vẫn là 15 phút. Chuyển sang container không đổi giới hạn này.
+
+Điểm mình thích nhất: cùng một image chạy được ở máy local để test trước khi đẩy lên Amazon ECR, nên "chạy được ở máy mình" và "chạy được trên Lambda" là cùng một thứ.
+
+### 3. Đi theo 7 luồng trên sơ đồ
+
+1. Build image, ghim base image bằng digest, tag bằng commit SHA rồi đẩy lên Amazon ECR.
+2. EventBridge Scheduler chạy theo lịch cron mỗi đêm, gọi Lambda prepare theo kiểu bất đồng bộ.
+3. Lambda prepare gom và làm sạch dữ liệu, ghi vào S3 theo ngày (`data/dt=…/`).
+4. Prepare chạy xong, Lambda destination gọi tiếp Lambda inference. Có thể nối cả OnSuccess lẫn OnFailure: nếu một nguồn dữ liệu lỗi, inference vẫn chạy cho phần dữ liệu còn tốt.
+5. Lambda inference đọc dữ liệu và trọng số mô hình trong `models/`.
+6. Kết quả được ghi vào DynamoDB để dashboard hoặc API đọc lại.
+7. Log và metric đi về CloudWatch: một dòng log tổng kết mỗi lần chạy và một alarm trên metric Errors là đủ để sáng hôm sau biết đêm qua chạy ra sao.
+
+![Sơ đồ pipeline batch inference hằng đêm với Lambda container image](/images/3-Blog/blog3_figure1.jpg)
+
+*Ảnh: sơ đồ ví dụ một pipeline batch inference hằng đêm, mình vẽ bằng draw.io dựa trên tài liệu AWS.*
+
+Ô đỏ góc dưới sơ đồ là phương án real-time endpoint chạy 24/7, không hợp với kiểu workload này.
+
+### 4. Những điều mình phát hiện khi đọc tài liệu
+
+**Mô hình nhỏ không nhất thiết phải mang cả framework lên Lambda.** Với các mô hình tuyến tính hoặc mạng nhỏ, có thể train ở nơi khác, xuất trọng số ra file (ví dụ `.npz`) rồi lúc dự báo chỉ cần NumPy để nhân ma trận. Image nhẹ hơn nhiều và khởi động nhanh hơn.
+
+**Base image không phải của AWS thì phải tự cài runtime interface client.** Base image của AWS (`public.ecr.aws/lambda/python`) có sẵn thành phần này. Nếu dùng image khác như `python:3.12-slim` thì phải cài `awslambdaric`, thiếu nó thì Lambda không gọi được handler.
+
+```dockerfile
+# Minh họa rút gọn
+FROM python:3.12-slim@sha256:<digest>
+WORKDIR /function
+COPY requirements.txt .
+RUN pip install --no-cache-dir awslambdaric -r requirements.txt
+COPY src/ ./src/
+ENTRYPOINT ["python", "-m", "awslambdaric"]
+CMD ["src.inference.handler"]
 ```
 
-![Sơ đồ prompt caching trong vòng lặp tool use với Converse API](/images/3-Blog/blog3_figure1.png)
+Thêm một chi tiết mình phát hiện khi chạy thử: `awslambdaric` tìm module handler theo thư mục làm việc của container. Nếu thư mục làm việc không phải nơi chứa `src/`, Lambda báo `Runtime.ImportModuleError`. Vì vậy nên khai báo `WORKDIR` rõ ràng thay vì dựa vào mặc định của base image.
 
-*Hình 1. Sơ đồ cách đặt cachePoint trong vòng lặp tool use và chi phí minh họa, mình tự vẽ dựa trên tài liệu AWS*
+**Gọi bất đồng bộ thì Lambda tự thử lại.** Mặc định Lambda thử lại 2 lần khi function trả lỗi. Có thể chỉnh số lần thử lại từ 0 đến 2, và thời gian giữ event trong hàng đợi từ 60 giây đến 6 giờ. Với job inference, đặt retry bằng 0 thường hợp lý hơn: lỗi thì dừng, alarm báo, người vận hành đọc log rồi chạy lại có kiểm soát.
 
-### 2. Tiền ở đâu ra?
+**Với lời gọi trực tiếp tới function, Lambda destinations chỉ áp dụng cho kiểu bất đồng bộ** (ngoài ra event source mapping của Kinesis, DynamoDB Streams và Kafka có OnFailure destination riêng). Đích có thể là Lambda khác, SQS, SNS, EventBridge, hoặc S3 (riêng S3 chỉ dùng cho OnFailure). Cái bẫy dễ gặp: `aws lambda invoke` mặc định gọi đồng bộ (`RequestResponse`), nên chạy tay thì function đầu chạy xong nhưng destination không kích hoạt. Muốn chạy lại cả chuỗi phải gọi:
 
-Token đầu vào giờ có 3 mức giá: token ghi vào cache, token đọc từ cache, và token thường. Theo bảng giá Bedrock, với nhiều model Claude: ghi cache 5 phút bằng 1,25 lần giá input thường, ghi cache 1 giờ bằng 2 lần, còn đọc cache chỉ bằng 0,1 lần (có model còn thấp hơn). Token đầu ra không đổi giá.
-
-Ví dụ minh họa: chatbot có định nghĩa tool + system prompt dài 5.000 token, mỗi câu hỏi trung bình 3 lần gọi model (2 vòng tool). Chỉ tính riêng phần 5.000 token lặp lại, quy ra "đơn vị = giá 1 token input thường":
-
-- Không cache: 3 × 5.000 = 15.000 đơn vị.
-- Có cache, cache đang trống (câu hỏi đầu tiên): ghi 5.000 × 1,25 + đọc 2 × 5.000 × 0,1 = 7.250 đơn vị, giảm khoảng 52%.
-- Có cache, cache đang "ấm" (có request khác trong 5 phút trước đó): đọc 3 × 5.000 × 0,1 = 1.500 đơn vị, giảm 90%.
-
-Chatbot càng nhiều vòng tool, system prompt càng dài, người dùng hỏi càng đều tay thì càng lợi. Ngoài tiền, tài liệu còn nêu 2 lợi ích nữa: giảm độ trễ vì model không phải xử lý lại phần đã cache, và token đọc từ cache không bị trừ vào rate limit.
-
-### 3. Sáng kiến: sắp xếp prompt để cache trúng
-
-Bật `cachePoint` thì dễ, làm cho nó trúng mới khó. Vì cache khớp theo tiền tố chính xác, chỉ cần một ký tự ở đầu thay đổi là cả phần sau trượt. Mình rút ra mấy nguyên tắc:
-
-- **Tĩnh trước, động sau.** Thứ tự lý tưởng: định nghĩa tool → system prompt cố định → lịch sử hội thoại → câu hỏi mới.
-- **Đưa phần động ra khỏi system prompt.** Lỗi rất hay gặp là chèn "Hôm nay là 17/11/2026, 10:32" hay tên người dùng vào đầu system prompt: mỗi request một khác, cache không bao giờ trúng. Hãy đưa những thông tin này xuống message của người dùng, sau mốc cache.
-- **Giữ danh sách tool cố định và đúng thứ tự.** Nếu code dựng `toolConfig` từ một dict/set mà thứ tự không ổn định, hoặc mỗi nhóm người dùng một bộ tool khác nhau, tiền tố sẽ khác nhau và cache trượt. Sắp xếp tool theo tên trước khi gửi là đủ.
-- **Dùng mốc cache "di động" trong vòng lặp tool.** Ngoài mốc sau tools/system, đặt thêm một `cachePoint` ở cuối message mới nhất (message chứa `toolResult`). Vòng sau sẽ đọc lại được cả lịch sử của vòng trước thay vì chỉ phần tools/system. Lưu ý tài liệu nói Claude chỉ dò ngược khoảng 20 content block trước mỗi mốc, nên hội thoại dài thì nên có nhiều mốc.
-- **Tách mốc theo tần suất thay đổi.** Ví dụ một mốc sau tools, một mốc sau system prompt: khi bạn sửa system prompt, phần tools vẫn được đọc từ cache.
-
-Với các model Claude mới, còn có "automatic caching": thêm một trường `cache_control` ở cấp request (qua `additionalModelRequestFields` trong Converse), Claude tự đặt mốc ở block cuối và dời dần theo hội thoại. Cách này đơn giản hơn nhưng vẫn phải tuân thủ nguyên tắc "tĩnh trước, động sau".
-
-### 4. Những bẫy cần biết
-
-- **Ngưỡng tối thiểu:** tiền tố trước mỗi mốc phải đủ số token tối thiểu của model, hiện từ 512 đến 4.096 token tùy model (ví dụ Claude Haiku 4.5 cần 4.096, Claude Sonnet 4.6 cần 1.024). Chưa đủ ngưỡng thì request vẫn chạy bình thường nhưng KHÔNG cache gì cả, và không báo lỗi. Ngưỡng tính dồn trên cả tools + system + messages.
-- **Không đảm bảo trúng:** cache nằm trên server đã xử lý request. Request rơi vào server khác (ví dụ Region khác khi dùng cross-Region inference), hoặc gửi trùng nhau trước khi request đầu kịp trả lời, sẽ ghi entry mới thay vì đọc. Tài liệu cũng nói lúc tải cao, cross-Region inference có thể làm tăng số lần ghi cache.
-- **Ghi đắt hơn đọc:** nếu traffic thưa (người dùng hỏi cách nhau hơn 5 phút), cache hết hạn liên tục và bạn trả phí ghi 1,25 lần mà không đọc lại được. Khi đó cân nhắc TTL 1 giờ (ghi 2 lần giá) hoặc không cache.
-- Chỉ dùng được với on-demand, không hỗ trợ batch inference.
-- Đặt `ttl` cho model chỉ hỗ trợ 5 phút có thể bị `ValidationException`.
-
-### 5. Đo để biết có hiệu quả không
-
-Response của Converse có thêm `cacheReadInputTokens` và `cacheWriteInputTokens`. Lưu ý khi bật cache, `inputTokens` chỉ còn là phần KHÔNG cache, nên:
-
-```text
-tổng token đầu vào = inputTokens + cacheReadInputTokens + cacheWriteInputTokens
+```bash
+aws lambda invoke --function-name <prepare> --invocation-type Event out.json
 ```
 
-Mình khuyên log 3 con số này cho mỗi lần gọi và theo dõi tỉ lệ đọc cache = cacheRead / tổng token đầu vào. Nếu `cacheWriteInputTokens` luôn bằng 0 thì nhiều khả năng tiền tố chưa đủ ngưỡng; nếu lần nào cũng ghi mà không đọc thì có phần động đang nằm trước mốc cache.
+### 5. Chi phí
 
-### Checklist
+Lambda có free tier 1 triệu request và 400.000 GB-giây mỗi tháng, không hết hạn sau 12 tháng như nhiều dịch vụ khác (tính chung cho cả tài khoản). Ví dụ một function 1 GB, giả sử lần nào cũng chạy hết 120 giây, mỗi đêm một lần thì một tháng chỉ khoảng 3.600 GB-giây, chưa tới 1% free tier. ECR tính phí lưu trữ image theo dung lượng, nên đặt lifecycle policy để chỉ giữ vài image gần nhất.
 
-- Model của bạn có hỗ trợ prompt caching không, ngưỡng tối thiểu bao nhiêu token, TTL nào?
-- Tools và system prompt có cố định, đúng thứ tự giữa các request không?
-- Đã đưa ngày giờ, tên người dùng, dữ liệu theo phiên ra khỏi phần trước mốc cache chưa?
-- Đã có mốc cache cuối message mới nhất trong vòng lặp tool chưa?
-- Traffic có đủ dày để cache 5 phút còn "ấm" không? Nếu không, TTL 1 giờ có đáng không?
-- Đã log `cacheReadInputTokens` / `cacheWriteInputTokens` để đo tỉ lệ trúng chưa?
+### Khi nào chọn gì
+
+- Chạy theo lô thưa, mô hình nhỏ, chạy bằng CPU, dưới 15 phút: **Lambda container image**.
+- Lưu lượng thất thường, chấp nhận cold start, không cần GPU: **SageMaker Serverless Inference**.
+- Payload lớn hoặc xử lý lâu: **SageMaker Asynchronous Inference**.
+- Chấm điểm cả tập dữ liệu lớn theo lô: **SageMaker Batch Transform**.
+- Cần độ trễ mili-giây liên tục, mô hình lớn hoặc cần GPU: **SageMaker real-time endpoint**.
 
 ### Kết luận
 
-Với chatbot có tool use, phần prompt lặp lại thường lớn hơn nhiều so với câu hỏi mới của người dùng. Prompt caching biến phần lặp lại đó thành token "đọc cache" với giá chỉ khoảng một phần mười, nhưng chỉ khi bạn sắp xếp prompt theo nguyên tắc tĩnh trước, động sau và đo lại bằng số liệu cache trong response. Đây là một trong những cách tối ưu có tỉ lệ "công sức bỏ ra / tiền tiết kiệm" tốt nhất mà mình biết trên Bedrock.
+Chọn dịch vụ theo cách workload thật sự chạy, không theo cái nhãn "đây là bài toán ML". Với một job dự báo vài giây mỗi đêm, Lambda container image đủ chỗ cho thư viện, chạy được y hệt ở local và gần như không tốn tiền. Phần còn lại là nắm rõ kiểu gọi (đồng bộ hay bất đồng bộ), vì nhiều tính năng của Lambda như destinations hay retry chỉ áp dụng cho một kiểu.
 
-*Lưu ý: danh sách model hỗ trợ, ngưỡng token, TTL và giá cache thay đổi khá thường xuyên, nên kiểm tra lại tài liệu và bảng giá mới nhất trước khi áp dụng.*
+*Lưu ý: giá và giới hạn dịch vụ có thể thay đổi, nên kiểm lại trang AWS Pricing và tài liệu mới nhất trước khi áp dụng. Đoạn Dockerfile là minh họa rút gọn.*
 
 ### Tài liệu tham khảo
 
-- [Prompt caching for faster model inference](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
-- [CachePointBlock (API reference)](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_CachePointBlock.html)
-- [Use the Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html)
-- [Tool use (function calling)](https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html)
-- [Amazon Bedrock pricing](https://aws.amazon.com/bedrock/pricing/)
+- [Lambda quotas](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html)
+- [Create a Lambda function using a container image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
+- [Lambda asynchronous invocation](https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html)
+- [AWS Lambda pricing](https://aws.amazon.com/lambda/pricing/)
+- [SageMaker Serverless Inference](https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html)
+- [Inference options in Amazon SageMaker AI](https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html)
 
-#AWS #AmazonBedrock #PromptCaching #ConverseAPI #ToolUse #CostOptimization #GenAI #AWSStudyGroup #FCAJ
+#AWS #AWSLambda #AmazonECR #AmazonSageMaker #Serverless #MLOps #AWSStudyGroup #FCAJ

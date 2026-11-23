@@ -6,22 +6,34 @@ chapter: false
 pre: " <b> 3. </b> "
 ---
 
-Tối thiểu 3 bài blog kỹ thuật đã đăng lên [AWS Study Group](https://www.facebook.com/groups/awsstudygroupfcj/).
+5 bài blog kỹ thuật của nhóm đã đăng lên [AWS Study Group](https://www.facebook.com/groups/awsstudygroupfcj/), mỗi thành viên một bài.
 
-### [Blog 1 - AgentCore Memory: Vì sao agent vừa được kể xong đã "quên"?](3.1-Blog1/)
+### [Blog 1 - Prompt caching cho chatbot có tool use: Đặt cachePoint đúng chỗ để giảm tới ~90% chi phí phần prompt lặp lại trên Amazon Bedrock](3.1-Blog1/)
 
-Bài tự viết, lấy ý tưởng từ slide "AgentCore Memory" tại sự kiện FCAJ x FPTU: Cloud Mastery 1. Bài giải thích hai tầng của Amazon Bedrock AgentCore Memory (short-term ghi đồng bộ dạng event, long-term được trích xuất bất đồng bộ thành memory record) qua 5 luồng dữ liệu được đánh số, chỉ ra vì sao agent chưa truy xuất được sở thích người dùng vừa nói, và đề xuất cách đọc cả hai tầng (`ListEvents` + `RetrieveMemoryRecords`), nạp trực tiếp bằng `BatchCreateMemoryRecords`/`IngestData`, kèm checklist khi agent "không nhớ".
-
-Phan Tấn Phước đăng ngày 14/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2337675363664089/)
-
-### [Blog 2 - Tool use với Bedrock Converse API: Model gọi đúng tool rồi, sao vẫn trả lời sai?](3.2-Blog2/)
-
-Bài tự viết, rút ra từ kinh nghiệm làm chatbot trên Amazon Bedrock, minh họa bằng ví dụ chatbot thời tiết. Bài giải thích vòng lặp tool use 5 bước của Converse API (`toolUse` → chạy tool → `toolResult` → lặp tới `end_turn`), các "phanh" cần có khi chạy thật (giới hạn số vòng, hạn chót dưới timeout của API Gateway, xử lý mọi `stopReason`), cách báo lỗi tool có cấu trúc, và vì sao phải thiết kế output của tool cho model dễ đọc đúng, kèm checklist.
-
-Phan Tấn Phước đăng ngày 16/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2339395856825373/)
-
-### [Blog 3 - Prompt caching cho chatbot có tool use: Đặt cachePoint đúng chỗ để giảm tới ~90% chi phí phần prompt lặp lại trên Amazon Bedrock](3.3-Blog3/)
-
-Bài tự viết, tổng hợp từ tài liệu AWS, các con số là ví dụ minh họa. Bài giải thích prompt caching trong Converse API (`cachePoint` ở tools, system, messages; giá ghi và đọc cache; TTL), ước tính mức tiết kiệm cho phần lặp lại trong vòng lặp tool use, và đề xuất cách sắp xếp prompt để cache thật sự trúng (tĩnh trước, động sau; danh sách tool ổn định; mốc cache di động ở cuối message mới nhất), kèm các bẫy (ngưỡng token tối thiểu, không đảm bảo trúng) và cách đo tỉ lệ trúng.
+Bài tổng hợp từ tài liệu AWS, các con số là ví dụ minh họa. Bài giải thích prompt caching trong Converse API (`cachePoint` ở tools, system, messages; giá ghi và đọc cache; TTL), ước tính mức tiết kiệm cho phần lặp lại trong vòng lặp tool use, và đề xuất cách sắp xếp prompt để cache thật sự trúng (tĩnh trước, động sau; danh sách tool ổn định; mốc cache di động ở cuối message mới nhất), kèm các bẫy cần biết và cách đo tỉ lệ trúng.
 
 Phan Tấn Phước đăng ngày 17/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2340410270057265/)
+
+### [Blog 2 - Khách hàng đặt hàng thành công nhưng hệ thống kho không nhận được event: Transactional Outbox giải quyết thế nào trên AWS?](3.2-Blog2/)
+
+Bài giải thích Dual Write Problem trong kiến trúc microservices và cách Transactional Outbox Pattern giải quyết: ghi đơn hàng và outbox event trong cùng một DynamoDB transaction (`TransactWriteItems`), rồi dùng DynamoDB Streams, EventBridge Pipes, EventBridge và SQS để phát event bất đồng bộ. Bài cũng nói vì sao consumer vẫn cần idempotency và khi nào nên dùng kiến trúc này.
+
+Huỳnh Ngọc Tuấn đăng ngày 16/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2338993156865643/)
+
+### [Blog 3 - Mô hình chỉ chạy vài giây mỗi ngày: Có cần đến SageMaker Endpoint không?](3.3-Blog3/)
+
+Bài so sánh bốn cách chạy inference trên SageMaker và chỉ ra vì sao một job dự báo nhỏ chạy mỗi đêm hợp với Lambda container image hơn real-time endpoint. Bài đi qua pipeline 7 bước (ECR, EventBridge Scheduler, Lambda destinations, S3, DynamoDB, CloudWatch), các bẫy gặp khi chạy thử (`awslambdaric`, `WORKDIR`, gọi đồng bộ và bất đồng bộ), chi phí so với free tier của Lambda, và bảng gợi ý khi nào chọn gì.
+
+Trịnh Tiến Khải đăng ngày 15/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2338607513570874/)
+
+### [Blog 4 - Từ SageMaker đến thiết bị: Triển khai mô hình ML xuống edge bằng AWS IoT Greengrass V2](3.4-Blog4/)
+
+Bài tìm hiểu từ AWS IoT Greengrass V2 Developer Guide. Bài giải thích vì sao chạy suy luận ngay trên thiết bị, các khái niệm nền (core device, component, deployment, nucleus), cách chia model/runtime/inference component, điều kiện với bucket S3 và thiết bị, cách tùy biến component mẫu, và các điểm cần lưu ý (Edge Manager đã ngừng, phiên bản nucleus, runtime ghim phiên bản).
+
+Nguyễn Tiến Long đăng ngày 21/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2344828116282147/)
+
+### [Blog 5 - Mỗi tối chạy một việc rồi xử lý tiếp: Có cần một server chạy 24/7 hay Step Functions không?](3.5-Blog5/)
+
+Bài hướng dẫn thay một máy chủ chạy cron bằng EventBridge Scheduler, Lambda (dùng container image khi thư viện nặng) và Lambda Destinations để nối hai bước, kèm CloudWatch Alarm để giám sát. Bài nói về retry policy của Scheduler và Lambda, IAM role tối thiểu quyền để tránh lỗi confused deputy, và khi nào nên chuyển sang Step Functions.
+
+Châu Trần Mạnh Tiến đăng ngày 15/11/2026: [bài gốc trên AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2338839130214379/)

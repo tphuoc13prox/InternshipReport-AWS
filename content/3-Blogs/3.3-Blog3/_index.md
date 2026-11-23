@@ -1,101 +1,108 @@
 ---
 title: "Blog 3"
-date: 2026-11-17
+date: 2026-11-15
 weight: 3
 chapter: false
 pre: " <b> 3.3. </b> "
 ---
 
-# Prompt Caching for Chatbots with Tool Use: Place cachePoint in the Right Spot to Cut Up to ~90% of the Cost of Repeated Prompt Content on Amazon Bedrock
+# The Model Only Runs a Few Seconds a Day: Do You Really Need a SageMaker Endpoint?
 
-by Phan Tấn Phước | November 17, 2026 | published in [AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/) | [Original post on Facebook](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2340410270057265/)
+by Trịnh Tiến Khải | November 15, 2026 | published in [AWS Study Group VN](https://www.facebook.com/groups/awsstudygroupfcj/) | [Original post on Facebook](https://www.facebook.com/groups/awsstudygroupfcj/permalink/2338607513570874/)
 
-*An original post compiled from the AWS documentation; the numbers in the post are illustrative. The post was written and published in Vietnamese; this page is an English translation that stays faithful to the published version.*
+*A post by team member Trịnh Tiến Khải. The post was written and published in Vietnamese; this page is an English translation that stays faithful to the published version, with the full links of the references.*
 
-In my previous post about tool use with the Converse API, I mentioned that Converse does not keep the conversation for you, so every tool round is another model call that must resend all the tool definitions, the system prompt, and the history. A question that needs two tool rounds means three calls, and that "identical" content is billed three times. Prompt caching is a way to pay much less for that repeated content while also reducing latency. In this post I summarize the AWS documentation and explain how to arrange the prompt so that the cache actually "hits". The numbers in the post are illustrative; the diagram is shown in Figure 1.
+Recently I have been looking into the ways to run inference for machine learning models on AWS, and I found something quite interesting: for many problems, the most important question is not "which model" but "how is the model called". In this post I write down what I read, with an example diagram that numbers each flow (attached image) so it is easier to follow.
 
-### 1. How does prompt caching work?
+**The scenario:** an online store wants to forecast tomorrow's number of orders for each warehouse. It runs once a night after the day's data is closed; the model runs for a few seconds and the results are written to a database for a dashboard to read. Nobody needs the model to answer on every click.
 
-Bedrock caches by prompt prefix. You set cache checkpoints with a `cachePoint` block; the content before the checkpoint is stored, and a later request with the same prefix reads it from the cache instead of processing it again.
+The first instinct is usually "it's a machine learning model, so put it on a SageMaker endpoint". But after reading the pricing carefully, I found that this choice does not fit this kind of workload.
 
-- There are two types: implicit (Bedrock tries to reuse the prefix on its own, with no configuration, but only on a best-effort basis) and explicit (you place `cachePoint` yourself). For Claude on Bedrock you must use explicit caching: requests without cache controls are not cached.
-- In Converse, `cachePoint` can be placed in three places: `tools`, `system`, and `messages`. They are processed in the order tools → system → messages and are chained: changing the tools also invalidates the cache for the system and messages that follow.
-- Claude allows at most four cache checkpoints per request.
-- The cache has a TTL, five minutes by default, which is reset on every cache hit. Some models support a one-hour TTL (`"ttl": "1h"`).
+### 1. Four ways to run inference on SageMaker
 
-The syntax is very short; you just add one block after the content you want to cache:
+- **Real-time endpoint:** billed per instance-hour for as long as the endpoint is running, even when there are no requests. A good fit when you need low latency, steady traffic, or a GPU.
+- **Serverless Inference:** scales to zero when idle, at the cost of cold starts. Memory can be set from 1 GB to 6 GB, and there is no GPU.
+- **Asynchronous Inference:** requests are put in a queue; a good fit for large payloads or long processing times.
+- **Batch Transform:** runs in batches over a whole dataset and shuts down when done.
 
-```json
-{"cachePoint": {"type": "default"}}
+For a job of a few seconds a day, a real-time endpoint is basically paying for a machine that sits and waits. Batch Transform or Serverless Inference would work, but if the model is small and can run on a CPU, there is an even simpler option: AWS Lambda.
+
+### 2. Why a Lambda container image instead of a zip package
+
+- A Lambda zip package is limited to 250 MB unzipped (including layers). Data libraries such as pandas, pyarrow, and scikit-learn together easily hit that limit.
+- A container image can be up to 10 GB (uncompressed, including all layers).
+- The maximum timeout is still 15 minutes. Moving to a container does not change this limit.
+
+What I like most: the same image runs on a local machine for testing before it is pushed to Amazon ECR, so "it runs on my machine" and "it runs on Lambda" are the same thing.
+
+### 3. Following the 7 flows in the diagram
+
+1. Build the image, pin the base image by digest, tag it with the commit SHA, and push it to Amazon ECR.
+2. EventBridge Scheduler runs on a nightly cron schedule and invokes the prepare Lambda asynchronously.
+3. The prepare Lambda collects and cleans the data and writes it to S3 by date (`data/dt=…/`).
+4. When prepare finishes, a Lambda destination invokes the inference Lambda. You can wire both OnSuccess and OnFailure: if one data source fails, inference still runs on the data that is still good.
+5. The inference Lambda reads the data and the model weights in `models/`.
+6. The results are written to DynamoDB for the dashboard or an API to read.
+7. Logs and metrics go to CloudWatch: one summary log line per run and one alarm on the Errors metric are enough to know the next morning how last night's run went.
+
+![A nightly batch inference pipeline with a Lambda container image](/images/3-Blog/blog3_figure1.jpg)
+
+*Image: an example diagram of a nightly batch inference pipeline, which I drew in draw.io based on the AWS documentation.*
+
+The red box in the bottom corner of the diagram is the option of a real-time endpoint running 24/7, which does not fit this kind of workload.
+
+### 4. What I discovered while reading the documentation
+
+**A small model does not have to bring a whole framework to Lambda.** For linear models or small networks, you can train elsewhere, export the weights to a file (for example `.npz`), and at prediction time only need NumPy to multiply matrices. The image is much lighter and starts faster.
+
+**With a non-AWS base image, you must install the runtime interface client yourself.** The AWS base image (`public.ecr.aws/lambda/python`) already includes it. If you use another image such as `python:3.12-slim`, you must install `awslambdaric`; without it, Lambda cannot call the handler.
+
+```dockerfile
+# Simplified illustration
+FROM python:3.12-slim@sha256:<digest>
+WORKDIR /function
+COPY requirements.txt .
+RUN pip install --no-cache-dir awslambdaric -r requirements.txt
+COPY src/ ./src/
+ENTRYPOINT ["python", "-m", "awslambdaric"]
+CMD ["src.inference.handler"]
 ```
 
-![Prompt caching in the tool use loop with the Converse API](/images/3-Blog/blog3_figure1.png)
+One more detail I found while testing: `awslambdaric` looks for the handler module relative to the container's working directory. If the working directory is not where `src/` lives, Lambda reports `Runtime.ImportModuleError`. So it is better to declare `WORKDIR` explicitly instead of relying on the base image's default.
 
-*Figure 1. Where to place cachePoint in the tool use loop, with an illustrative cost comparison, drawn by me based on the AWS documentation*
+**With asynchronous invocation, Lambda retries on its own.** By default, Lambda retries twice when the function returns an error. You can set the number of retries from 0 to 2, and the maximum age of an event in the queue from 60 seconds to 6 hours. For an inference job, setting retries to 0 is usually more sensible: if it fails, it stops, the alarm fires, and an operator reads the logs and reruns it in a controlled way.
 
-### 2. Where do the savings come from?
+**For direct invocations of a function, Lambda destinations apply only to asynchronous invocations** (event source mappings for Kinesis, DynamoDB Streams, and Kafka also have their own OnFailure destination). The destination can be another Lambda, SQS, SNS, EventBridge, or S3 (S3 only for OnFailure). An easy trap: `aws lambda invoke` is synchronous by default (`RequestResponse`), so when you run it by hand the first function finishes but the destination does not fire. To rerun the whole chain you must call:
 
-Input tokens now have three price levels: tokens written to the cache, tokens read from the cache, and regular tokens. According to the Bedrock pricing page, for many Claude models a five-minute cache write costs 1.25 times the regular input price, a one-hour cache write costs 2 times, and a cache read costs only 0.1 times (some models are even lower). The output token price does not change.
-
-Illustrative example: a chatbot whose tool definitions plus system prompt are 5,000 tokens long, with an average of three model calls per question (two tool rounds). Counting only the 5,000 repeated tokens, in "units = the price of one regular input token":
-
-- No cache: 3 × 5,000 = 15,000 units.
-- With caching, cache empty (first question): write 5,000 × 1.25 + read 2 × 5,000 × 0.1 = 7,250 units, about 52% less.
-- With caching, cache "warm" (another request arrived within the previous five minutes): read 3 × 5,000 × 0.1 = 1,500 units, 90% less.
-
-The more tool rounds the chatbot makes, the longer the system prompt, and the more steadily users ask questions, the bigger the gain. Besides cost, the documentation lists two more benefits: lower latency, because the model does not have to reprocess the cached part, and tokens read from the cache are not deducted from your rate limit.
-
-### 3. The idea: arrange the prompt so the cache hits
-
-Turning on `cachePoint` is easy; making it hit is the hard part. Because the cache matches on the exact prefix, a single changed character near the start makes everything after it miss. Here are the principles I took away:
-
-- **Static first, dynamic last.** The ideal order is: tool definitions → fixed system prompt → conversation history → new question.
-- **Move dynamic content out of the system prompt.** A very common mistake is inserting "Today is 17/11/2026, 10:32" or the user's name at the start of the system prompt: it differs on every request, so the cache never hits. Move this information into the user message, after the cache checkpoint.
-- **Keep the tool list fixed and in a stable order.** If your code builds `toolConfig` from a dict or set whose order is not stable, or if each user group gets a different set of tools, the prefix differs and the cache misses. Sorting the tools by name before sending them is enough.
-- **Use a "moving" cache checkpoint in the tool loop.** Besides the checkpoints after tools and system, add one more `cachePoint` at the end of the latest message (the message containing the `toolResult`). The next round can then read the history of the previous round as well, not just the tools and system part. Note that the documentation says Claude only looks back about 20 content blocks before each checkpoint, so long conversations should have several checkpoints.
-- **Split checkpoints by how often content changes.** For example, one checkpoint after the tools and one after the system prompt: when you edit the system prompt, the tools are still read from the cache.
-
-Newer Claude models also offer "automatic caching": add a `cache_control` field at the request level (through `additionalModelRequestFields` in Converse), and Claude places the checkpoint on the last block and moves it forward as the conversation grows. This is simpler, but you still need to follow the "static first, dynamic last" principle.
-
-### 4. Pitfalls to know
-
-- **Minimum threshold:** the prefix before each checkpoint must reach the model's minimum token count, currently between 512 and 4,096 tokens depending on the model (for example, Claude Haiku 4.5 needs 4,096 and Claude Sonnet 4.6 needs 1,024). Below the threshold the request still runs normally but NOTHING is cached, and no error is reported. The threshold is counted cumulatively across tools + system + messages.
-- **Hits are not guaranteed:** the cache lives on the server that processed the request. A request that lands on a different server (for example, in another Region when using cross-Region inference), or identical requests sent before the first one has started responding, write a new entry instead of reading one. The documentation also notes that at times of high demand, cross-Region inference can increase cache writes.
-- **Writes cost more than reads:** if traffic is sparse (users ask more than five minutes apart), the cache keeps expiring and you pay the 1.25x write price without reading it back. In that case, consider the one-hour TTL (writes at 2x the price) or no caching at all.
-- Caching works only with on-demand inference; batch inference is not supported.
-- Setting `ttl` on a model that supports only the five-minute TTL can result in a `ValidationException`.
-
-### 5. Measure to know whether it works
-
-The Converse response includes `cacheReadInputTokens` and `cacheWriteInputTokens`. Note that when caching is enabled, `inputTokens` covers only the NON-cached part, so:
-
-```text
-total input tokens = inputTokens + cacheReadInputTokens + cacheWriteInputTokens
+```bash
+aws lambda invoke --function-name <prepare> --invocation-type Event out.json
 ```
 
-I recommend logging these three numbers for every call and tracking the cache read ratio = cacheRead / total input tokens. If `cacheWriteInputTokens` is always 0, the prefix most likely does not reach the threshold; if every call writes but never reads, some dynamic content is sitting before the cache checkpoint.
+### 5. Cost
 
-### Checklist
+Lambda has a free tier of 1 million requests and 400,000 GB-seconds per month, which does not expire after 12 months like many other services (shared across the whole account). For example, a 1 GB function that we assume always runs the full 120 seconds, once a night, uses only about 3,600 GB-seconds a month, less than 1% of the free tier. ECR charges for image storage by size, so set a lifecycle policy to keep only the last few images.
 
-- Does your model support prompt caching, what is its minimum token threshold, and which TTL does it support?
-- Are the tools and the system prompt fixed and in the same order across requests?
-- Have you moved the date and time, the user's name, and session data out of the part before the cache checkpoint?
-- Is there a cache checkpoint at the end of the latest message in the tool loop?
-- Is traffic dense enough for the five-minute cache to stay "warm"? If not, is the one-hour TTL worth it?
-- Are you logging `cacheReadInputTokens` / `cacheWriteInputTokens` to measure the hit rate?
+### What to choose when
+
+- Sparse batch runs, a small model, CPU only, under 15 minutes: **Lambda container image**.
+- Irregular traffic, cold starts acceptable, no GPU needed: **SageMaker Serverless Inference**.
+- Large payloads or long processing: **SageMaker Asynchronous Inference**.
+- Scoring a whole large dataset in batches: **SageMaker Batch Transform**.
+- Continuous millisecond latency, a large model, or a GPU: **SageMaker real-time endpoint**.
 
 ### Conclusion
 
-For a chatbot with tool use, the repeated part of the prompt is usually much larger than the user's new question. Prompt caching turns that repeated part into "cache read" tokens that cost only about a tenth of the price, but only if you arrange the prompt as static first, dynamic last, and verify it with the cache figures in the response. It is one of the optimizations with the best "effort spent / money saved" ratio that I know of on Bedrock.
+Choose the service by how the workload actually runs, not by the label "this is an ML problem". For a forecasting job that runs a few seconds every night, a Lambda container image has enough room for the libraries, runs exactly the same locally, and costs almost nothing. The rest is understanding the invocation type (synchronous or asynchronous), because many Lambda features such as destinations and retries apply to only one of them.
 
-*Note: the list of supported models, the token thresholds, the TTLs, and cache prices change fairly often, so check the latest documentation and pricing before applying this.*
+*Note: prices and service limits may change, so check the AWS Pricing pages and the latest documentation before applying this. The Dockerfile is a simplified illustration.*
 
 ### References
 
-- [Prompt caching for faster model inference](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
-- [CachePointBlock (API reference)](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_CachePointBlock.html)
-- [Use the Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html)
-- [Tool use (function calling)](https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html)
-- [Amazon Bedrock pricing](https://aws.amazon.com/bedrock/pricing/)
+- [Lambda quotas](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html)
+- [Create a Lambda function using a container image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
+- [Lambda asynchronous invocation](https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html)
+- [AWS Lambda pricing](https://aws.amazon.com/lambda/pricing/)
+- [SageMaker Serverless Inference](https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html)
+- [Inference options in Amazon SageMaker AI](https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html)
 
-#AWS #AmazonBedrock #PromptCaching #ConverseAPI #ToolUse #CostOptimization #GenAI #AWSStudyGroup #FCAJ
+#AWS #AWSLambda #AmazonECR #AmazonSageMaker #Serverless #MLOps #AWSStudyGroup #FCAJ
