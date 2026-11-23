@@ -1,87 +1,73 @@
 ---
-title: "Prerequisite"
-date: 2025-09-09
+title: "Prerequisites"
+date: 2026-11-20
 weight: 2
 chapter: false
 pre: " <b> 5.2. </b> "
 ---
+#### Local tools
 
-#### AWS account and Region
+| Tool | Version | Used for |
+|---|---|---|
+| Python | 3.11 locally and in CI; 3.12 in the Lambda images | Data, model, Lambda and CDK code |
+| Node.js + npm | 22.12 or later (required by Vite 8) | AWS CDK CLI and the web app (React + Vite) |
+| AWS CLI | v2 (a version with `aws login`) | Signing in and working with AWS |
+| AWS CDK CLI | v2 | `npm install -g aws-cdk` |
+| Docker with `buildx` | latest | Building `linux/amd64` container images for Lambda |
+| Git | latest | Getting the source code |
 
-+ An AWS account with MFA enabled on the root user. Use the root user only for account-level tasks.
-+ Region **`ap-southeast-1` (Singapore)**. The CDK app pins this Region, and every resource in the workshop is created there.
-+ AWS Budgets set up before you start. The team uses a budget of 50 USD/month with email alerts (see [5.8](../5.8-cost/)).
+#### Get the code and run the tests
 
-#### Amazon Bedrock model access
+```bash
+git clone https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting.git
+cd CPAWS-commodity-forecasting
+git switch developer
 
-The chatbot calls **Claude Haiku 4.5** through a **global cross-Region inference profile** from `ap-southeast-1`:
-
-```text
-global.anthropic.claude-haiku-4-5-20251001-v1:0
+python -m venv .venv
+source .venv/bin/activate            # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements-dev.txt  # requirements.txt holds runtime libraries only
+python -m pytest -q
+ruff check .
 ```
 
-Open the Amazon Bedrock console in `ap-southeast-1`, go to **Model access**, and make sure Claude Haiku 4.5 is available to your account before you deploy the API stack.
+Tests must pass before you touch AWS. The `tests/test_infra_*.py` tests synthesize CDK to check IAM permissions, environment variables, Scheduler schedules and alarms, so they need `aws-cdk-lib` (`pip install -r infra/requirements.txt`).
 
-{{% notice info %}}
-A global profile lets Bedrock route a request to another Region, so the team cannot promise that chat questions stay in Singapore.
-{{% /notice %}}
+#### AWS account
 
-<!-- IMAGE: Bedrock console, Model access page showing Claude Haiku 4.5 as available (mask the Account ID) -->
-[ẢNH: Bedrock console – Model access, Claude Haiku 4.5 available]
-
-#### IAM permissions
-
-Deploy with a person's IAM identity that signs in with short-term credentials, not with long-term access keys. In the team, the members who deploy belong to a platform group that can deploy infrastructure but cannot administer IAM. To run this workshop your identity needs to:
-
-+ create and update CloudFormation stacks, and use the CDK bootstrap resources;
-+ create the IAM roles and policies that CDK generates for Lambda, Scheduler and API Gateway;
-+ manage Lambda, ECR, S3, DynamoDB, EventBridge Scheduler, API Gateway, Cognito, CloudWatch (logs, metric filters, alarms), SNS and SSM Parameter Store;
-+ call Amazon Bedrock (`bedrock:InvokeModel`) to test the model;
-+ manage AWS Amplify Hosting apps.
-
-Sign in with the AWS CLI using short-term credentials, for example:
+- **Do not use root day to day.** Root has MFA and is used only for account setup and billing.
+- **One IAM user per person**, placed in groups by role (admin, platform, ML, GenAI, read-only). Every member has MFA enabled.
+- **Sign in to the CLI with short-lived sessions**; do not create long-lived access keys:
 
 ```bash
 aws login --profile cpaws-dev
 aws sts get-caller-identity --profile cpaws-dev
 ```
 
-`cpaws-dev` is the profile name the team uses; any profile name works if you use it consistently in the commands below.
+- **Region:** `ap-southeast-1` (Singapore) for all resources.
+- **Amazon Bedrock:** before building the chatbot, check that the account can call **Claude Haiku 4.5** through the global inference profile (cross-Region inference). The team tried Claude Haiku 5.5 but was refused quota, so the MVP uses Haiku 4.5 (ADR-0004).
 
-#### Tools
+#### Put cost guards in place before creating resources
 
-| Tool | Used for |
-|---|---|
-| AWS CLI v2 | Sign-in, ECR login, checking logs and alarms |
-| Python 3.12 + `venv` | Lambda code, tests and the CDK app (`infra/`) |
-| Node.js 22.12 or later + npm | AWS CDK CLI and the web app (`web/`) |
-| AWS CDK CLI | `cdk diff`, `cdk deploy`, `cdk destroy` |
-| Docker | Building the ingest and predict container images |
-| Git | Cloning the team repository |
+1. Create an **AWS Budgets** budget of 50 USD/month, with alerts on actual and forecasted cost.
+2. Enable **Cost Anomaly Detection** with the default monitor.
+3. Activate the cost allocation tags `Project`, `Owner`, `Env`. CDK applies these three tags to every resource.
 
-Get the team's source code, [CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting](https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting), and install the dependencies:
+#### Secrets
 
-```bash
-git clone https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting.git
-cd CPAWS-commodity-forecasting
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements-dev.txt
-pip install -r infra/requirements.txt   # aws-cdk-lib for the CDK app
-python -m pytest -q                # unit tests, including CDK synth tests
-npm install -g aws-cdk
-```
-
-Bootstrap CDK once per account and Region:
+- `.env` is listed in `.gitignore`; the repository only commits `.env.example`, which holds variable names without values.
+- On AWS, the EIA API key is stored in **SSM Parameter Store** as a `SecureString`. CDK only receives the parameter **name**, by default `/cpaws/dev/eia-api-key`.
 
 ```bash
-cd infra
-cdk bootstrap --profile cpaws-dev
+# type the key at the prompt so it does not end up in shell history
+read -rs EIA_KEY
+aws ssm put-parameter --profile cpaws-dev \
+  --name /cpaws/dev/eia-api-key --type SecureString --value "$EIA_KEY"
+unset EIA_KEY
 ```
 
-#### One secret: the EIA API key
+{{% notice warning %}}
+The team repository is public. Never commit API keys, passwords, personal email addresses or a full Account ID. Pre-commit runs `gitleaks` and `detect-aws-credentials` to block them before a commit. In this workshop, `<ACCOUNT_ID>` is where you put your own account.
+{{% /notice %}}
 
-The ingest Lambda reads an EIA API key (used only to cross-check oil prices) from **SSM Parameter Store** as a `SecureString`. The CDK app only receives the **name** of the parameter, `/cpaws/dev/eia-api-key` by default. Never put the key itself in the repository, in a `.env` file or in a CDK context value. Create the parameter once in the Systems Manager console, choosing the type **SecureString**.
-
-<!-- IMAGE: Systems Manager Parameter Store, the /cpaws/dev/eia-api-key parameter of type SecureString (value hidden) -->
-[ẢNH: SSM Parameter Store – parameter `/cpaws/dev/eia-api-key`, type SecureString, value hidden]
+<!-- ẢNH: Console AWS Budgets, budget 50 USD (che email và Account ID) -->

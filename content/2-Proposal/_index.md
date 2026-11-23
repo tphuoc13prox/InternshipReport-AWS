@@ -1,155 +1,205 @@
 ---
 title: "Proposal"
-date: 2025-09-09
+date: "2026-10-21"
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
 ---
 
-# CPAWS – Commodity Price Forecasting on AWS
-## Serverless 1–7 session forecast ranges for gold, silver, Brent and WTI, with a Bedrock chatbot that explains them
+# CPAWS - Gold, Silver and Crude Oil Price Forecasting with an Explanatory Chatbot on AWS
+*(See next week's price forecast in USD and VND, and ask AI why prices may rise or fall)*
 
-### 1. Executive Summary
-CPAWS is the project of our five-person team in the First Cloud AI Journey program. We set out to build a website on AWS that, for four commodities (gold, silver, Brent crude and WTI crude) and each horizon of 1 to 7 trading sessions ahead, shows a forecast range instead of a single price, the probability that the price goes up, and how reliable past forecasts have actually been. A Vietnamese chatbot on Amazon Bedrock sits next to the forecasts and explains them in plain language. It only quotes numbers that it reads from the system through tools, and it never gives investment advice.
+---
 
-The plan was built around a serverless design: scheduled Lambda functions collect prices and publish forecasts once a day, results are stored in Amazon S3 and Amazon DynamoDB, and users reach them through Amazon API Gateway, Amazon Cognito and an AWS Amplify web app. The whole infrastructure is written with AWS CDK in one `dev` environment in `ap-southeast-1`. The build window is 7 weeks, from 12/10 to 29/11/2026.
+## 1. Executive Summary
 
-### 2. Problem Statement
+We are **CPAWS**, a team of 5 interns in the AWS First Cloud AI Journey (FCAJ) program. We are building a web platform that forecasts **gold, silver, Brent and WTI crude oil** prices **1–7 days ahead**, shown in both **USD and VND**, with a **Vietnamese chatbot on Amazon Bedrock** that explains why prices may rise or fall based on model outputs and cited news.
+
+| Member | Role |
+|---|---|
+| Trịnh Tiến Khải | Research Lead – main forecasting model, feature builder, predict Lambda code |
+| Nguyễn Tiến Long | Modeling & Evaluation – baselines, DLinear, accuracy evaluation |
+| Phan Tấn Phước | News & Chatbot – news labeling, chatbot |
+| Châu Trần Mạnh Tiến | Platform – CDK, Lambda, Step Functions, web |
+| Huỳnh Ngọc Tuấn | Data & Security Lead – IAM, API Gateway, Cognito, DynamoDB, cost |
+
+The system runs entirely on AWS with a **scheduled serverless architecture**: daily data collection, batch prediction and pre-computed results, keeping costs low and within the team's **roughly 200 USD of AWS credit**. The goal is a **working product**, not a research paper.
+
+---
+
+## 2. Problem Statement
+
 ### What's the Problem?
-Gold, silver and crude oil can move sharply when something big happens: a conflict, an interest-rate decision, an OPEC+ output decision. In Vietnam these prices matter to ordinary people, because domestic gold and silver prices track world prices and crude oil drives retail fuel prices. Anyone can look up today's price, but three things are still hard:
 
-- **What comes next is unclear.** Forecasts in the news are usually opinions, without numbers and without any record of how accurate they were.
-- **Why it moves is unclear.** News arrives in large, scattered pieces that are not tied to a concrete number.
-- **It is hard to relate to your own money.** World prices are quoted in USD per ounce or USD per barrel.
+Gold, silver and oil prices swing sharply around major events such as armed conflicts, central bank rate decisions or OPEC+ output decisions. In Vietnam these commodities trade in line with world markets: domestic gold and silver prices follow international prices, and crude oil is the main basis for retail fuel prices. Ordinary users can easily see current prices but face three problems:
+
+- **Hard to know what comes next:** press forecasts are usually qualitative, with no numbers and no track record.
+- **Hard to understand why:** news is plentiful, scattered and not tied to concrete numbers.
+- **Hard to relate to domestic prices:** world prices are quoted in USD/ounce or USD/barrel, which is hard to translate into local impact.
 
 ### The Solution
-Every trading day after the US session closes, a scheduled job downloads prices, cleans them and stores a snapshot in an S3 data lake. A second function forecasts the **distribution of the log return** over the next 1–7 sessions as seven quantiles and writes the result to DynamoDB. We forecast returns rather than price levels on purpose: tomorrow's price is almost always close to today's, so a price-level error looks small even for a model that has learned nothing. Working with returns forces a model to learn the actual change, and it lets us measure accuracy honestly.
 
-The web app turns the quantiles back into a price range in USD or VND and a probability of going up. Gold and silver are forecast on the GLD and SLV ETFs as proxy series, so their prices on the site are converted from GLD/SLV and are not spot prices. A chatbot built with the Bedrock Converse API answers questions in Vietnamese. It reads forecasts and labelled news through tools instead of inventing numbers.
+CPAWS forecasts the **distribution of log returns 1–7 sessions ahead** as 7 quantiles (5%, 10%, 25%, 50%, 75%, 90%, 95%), then converts them into price ranges and a probability of an increase for display. We do not forecast price levels directly: tomorrow's price is almost today's price, so a model that just repeats today's price looks "99% accurate". Forecasting returns forces the model to learn real changes and allows honest accuracy measurement.
 
-### Benefits and Return on Investment
-- **For users:** a range with a probability gives a more honest picture than a single "target price", and the reliability block shows how well past forecasts held up.
-- **For the team:** the project covers a full data and ML product on AWS: ingestion, storage, forecasting, an API with authentication, a web front end, a GenAI chatbot, monitoring and cost control.
-- **Cost:** nothing is billed by the hour. There are no servers running all day, no always-on model endpoint and no NAT Gateway, so the bill grows with usage instead of with time. The details are in section 6.
-- CPAWS is a learning project with no revenue, so we do not claim a payback period. Its value is a working product that other people can study and reproduce from the CDK code.
+The Amazon Bedrock chatbot takes numbers only from the system through **tool use**, cites a source for every reason, and gives no investment advice.
 
-### 3. Solution Architecture
-The proposal architecture below is the plan our team drew in draw.io at the start of the project. The architecture that is actually deployed is in the [Workshop](../5-workshop/) section, and the differences are listed at the end of this section.
+| User group | Main need |
+|---|---|
+| Gold savers | Next week's trend and expected price range |
+| Transport and import businesses, energy price watchers | World oil price trend, the main basis for domestic fuel prices |
+| Students and people interested in finance | Understanding which factors are moving prices |
 
-![CPAWS proposal architecture](/images/2-Proposal/CPAWS-architecture.jpg)
+### Benefits and ROI
 
-*Figure 2.1 – CPAWS architecture in the proposal (drawn by the CPAWS team with draw.io).*
+- **Verifiable numbers:** forecast ranges and historical accuracy are public, instead of qualitative opinions.
+- **Explanations with sources:** the chatbot ties every reason to news or an official release.
+- **Built for Vietnamese users:** conversion to VND at the current exchange rate.
+- **Low cost:** no 24/7 resources, estimated at 15–35 USD/month.
 
-The plan has three parts:
+---
 
-1. **A daily data and forecasting pipeline** triggered by a schedule: collect prices and news, label the news, store everything in S3, run the forecast and save it in DynamoDB.
-2. **A weekly retraining loop** orchestrated by AWS Step Functions with SageMaker AI training jobs and a model registry.
-3. **User-facing services:** a web app on Amplify, sign-in with Cognito, a REST API on API Gateway and Lambda, and a Bedrock chatbot with Guardrails and a knowledge base.
+## 3. Solution Architecture
+
+### Overview
+
+The system runs on a schedule: daily collection, batch prediction and stored results. Each component runs independently, so one failing data source does not stop the whole system.
+
+![CPAWS architecture](/images/2-Proposal/CPAWS-architecture.jpg)
 
 ### AWS Services Used
-- **Amazon EventBridge Scheduler:** starts the daily pipeline at a fixed time.
-- **AWS Lambda:** collects data, publishes forecasts and serves the API, without servers to manage.
-- **Amazon S3:** data lake for raw data, cleaned price snapshots and evaluation files.
-- **Amazon DynamoDB:** stores ready-to-read forecasts so the API can answer quickly.
-- **AWS Step Functions and Amazon SageMaker AI:** planned for weekly retraining, training jobs and a model registry.
-- **Amazon Bedrock:** news labelling and the chatbot (Converse API with tool use, Guardrails, Knowledge Bases).
-- **Amazon API Gateway and Amazon Cognito:** a REST API that only signed-in users can call, with request throttling.
-- **AWS Amplify Hosting:** hosts the React web app.
-- **Amazon CloudWatch and Amazon SNS:** logs, metrics, alarms and email alerts.
-- **AWS Secrets Manager:** planned for API keys of the data sources.
-- **AWS CDK / AWS CloudFormation:** infrastructure as code so the system can be recreated or removed with one command.
 
-### Component Design
-- **Data collection:** daily prices for GLD, SLV, BZ=F and CL=F, the USD/VND rate for display, and news and macro signals from several sources.
-- **Data lake:** raw files and cleaned snapshots on S3, one snapshot per run date.
-- **Forecasting:** seven quantiles of the log return for h = 1–7 sessions per asset. The proposal chose CEEMDAN + DLinear/LSTM as the main model, with simpler models as baselines.
-- **Serving:** the latest forecast per asset is written to DynamoDB, and the API only reads it.
-- **Web:** a basic and an advanced mode, prices in USD or VND, and a public record of historical accuracy.
-- **Chatbot:** Vietnamese questions and answers about forecasts and related news, with sources, and refusals for out-of-scope questions and investment advice.
-- **Operations:** alarms by email, budgets, and CI on GitHub.
-
-**Changes after the proposal.** While building, the team tested each part against the plan and changed what did not hold up. Every change has a written decision (ADR) in the team repository:
-
-| Proposal | Deployed system | Why |
+| Layer | AWS services | Role |
 |---|---|---|
-| Step Functions → SageMaker training job → model registry, retrained weekly | Two Lambda functions linked by a Lambda destination. The published forecast is the 252-session statistical baseline `baseline-q252`, and a challenger (S1a) runs in shadow mode | 13 configurations of DLinear, CEEMDAN + DLinear, volatility scaling and GJR-GARCH did not beat the baseline on the 2019 validation set, so there is no trained model to retrain |
-| Bedrock batch labelling of news + Knowledge Bases | News labelled by hand, packaged as JSON with the chat Lambda | Automatic labelling did not reach the quality threshold |
-| Many news and macro sources | Prices and FX from Yahoo Finance (yfinance); EIA and NBP only for cross-checks | Data scope and terms of use |
-| Secrets Manager | SSM Parameter Store SecureString | Only one key (EIA) is needed |
-| Chatbot with Guardrails | Converse + tool use, Guardrails not enabled | Turning them on after the official benchmark would change the behaviour that was evaluated |
-| GitHub Actions CI/CD | CI only; deployment runs from a team member's machine | GitHub does not hold AWS credentials and the repository is public |
-| Amplify connected to Git | Manual zip upload | The demo date came first; the domain is kept unchanged for grading |
-| — | Added: daily rolling-accuracy job, `GET /accuracy/{asset}`, 6 alarms, chat quota | Needed to measure live forecasts and to control cost |
+| Collection | Amazon EventBridge Scheduler, AWS Lambda | Call data sources on a daily schedule |
+| Storage | Amazon S3 (data lake), Amazon DynamoDB | Raw, clean, feature and model data; forecasts and accuracy |
+| Training | AWS Step Functions, Amazon SageMaker AI | Retraining, backtesting, champion/challenger comparison |
+| Prediction | AWS Lambda (container image on Amazon ECR) | Run the frozen model every day |
+| Conversational AI | Amazon Bedrock (Converse API, tool use, Guardrails) | Explain forecasts, label news |
+| Interface | AWS Amplify Hosting, Amazon API Gateway, Amazon Cognito | Per-asset web (USD/VND), sign-in, rate limiting |
+| Operations | Amazon CloudWatch, AWS Budgets, AWS CDK, GitHub Actions | Monitoring, cost alerts, infrastructure as code, CI/CD |
 
-### 4. Technical Implementation
-**Implementation Phases**
-The team planned the 7 weeks in four phases:
+### Workflow
 
-1. **Data and baseline (from 12/10):** price ingestion, cleaning against exchange calendars, the S3 data lake, and the 252-session baseline as the reference every model must beat.
-2. **Model experiments (October to early November):** each experiment had its plan, candidates and pass criterion committed before it was run, and every look at the 2019 validation set was counted.
-3. **Product (late October to mid November):** the forecast API, Cognito sign-in, the web app on Amplify, the `POST /chat` chatbot, the rolling-accuracy job and the alarms. Milestones: first automatic forecast on 27/10, chatbot deployed on 02/11, web app on Amplify on 04/11, shadow challenger on 04/11, accuracy schedule enabled on 12/11.
-4. **Freeze and hand-in (22/11 to 29/11):** no new features after 22/11; screenshots, rehearsal, report and workshop.
+- **Daily:** EventBridge Scheduler triggers the ingest Lambda to load prices and exchange rates into S3; when it finishes, the predict Lambda reads clean data, runs the champion model and writes 7 quantiles for h = 1–7 to DynamoDB.
+- **Weekly:** train a challenger model, backtest on recent weeks and replace the champion only when the challenger is better.
+- **When a user asks:** the chatbot calls tools to get forecasts, accuracy and related news, then answers with citations.
 
-**Technical Requirements**
-- Python 3.12 for Lambda code and data processing; AWS CDK (Python) for infrastructure; Docker to build the ingest and predict container images; Node.js with React, TypeScript and Vite for the web app.
-- `pandas_market_calendars` for NYSE and CME trading calendars, so that "h sessions ahead" counts real trading sessions.
-- Access to Amazon Bedrock models in `ap-southeast-1` (Claude Haiku 4.5 through a global cross-Region inference profile).
-- No future information: training and live prediction use the same data-publication rule, and tests check that a forecast for date t does not change when prices after t are edited.
-- Safe re-runs: forecasts are written to DynamoDB with conditional writes, so a published record is never overwritten.
-- GitHub Actions runs `ruff`, `pytest` (including CDK synth tests) and the web type-check, tests and build on every push and pull request.
+### AWS Well-Architected Review
 
-### 5. Timeline & Milestones
-**Project Timeline**
+| Pillar | Concern | CPAWS solution |
+|---|---|---|
+| **Operational Excellence** | Hands-off daily operation, quick failure detection, controlled changes | Infrastructure in AWS CDK; CI runs tests (pytest, ruff, infrastructure tests) on every Pull Request; every change is reviewed, IAM/infrastructure changes need the security owner's approval; CloudWatch Logs and Alarms for Lambdas; architecture decisions recorded as ADRs; images tagged by commit SHA for traceability |
+| **Security** | Protect data and API keys, prevent API abuse and prompt injection | IAM users in groups with short-lived sessions and no long-term access keys; one least-privilege IAM role per Lambda; API keys in SSM Parameter Store (SecureString); API Gateway with a Cognito authorizer and no self sign-up; news marked as untrusted data in prompts, Guardrails limit chatbot scope; the public repo contains no keys or full Account IDs |
+| **Reliability** | A failing source or missing session must not corrupt the whole system | Ingest and predict are decoupled and chained with Lambda Destinations on both OnSuccess and OnFailure; failing assets are skipped while others are still forecast; predict never falls back to an older date when the latest session is missing; ingest re-downloads the last 5 sessions and overwrites by key, so reruns are safe; S3 is the source of truth and DynamoDB can be rebuilt from it |
+| **Performance Efficiency** | Fast responses for the web and chatbot at low cost | Forecasts precomputed in batch; query-driven DynamoDB design (PK `asset`, SK `base_date`), reading the latest item with one `Query` and `Limit=1`; NumPy inference in a Lambda container instead of PyTorch; serverless services scale with traffic |
+| **Cost Optimization** | Run the whole project within about 200 USD of credit | No 24/7 endpoints, NAT Gateway or OpenSearch Serverless; on-demand DynamoDB; chatbot routing to a smaller model for simple questions and `max_tokens` limits; scheduled Training Jobs that stop automatically; AWS Budgets alert at 50 USD/month; cost estimated before adding resources |
+| **Sustainability** | (not scored) | Resources run only when needed; region close to users |
 
-| Period | Work |
+---
+
+## 4. Technical Implementation
+
+### Forecasting Models
+
+| Model | Role |
 |---|---|
-| 12/10 – 25/10 | Data pipeline, baseline, CI, API contract, first model experiments |
-| 26/10 – 08/11 | First automatic forecast (27/10), chatbot on AWS (02/11), web on Amplify (04/11), shadow challenger (04/11), internal chatbot demo (08/11) |
-| 09/11 – 21/11 | Rolling-accuracy job and API (10–12/11), official chatbot and model evaluations, report chapters |
-| 22/11 | Feature freeze |
-| 23/11 – 29/11 | Final checks, demo video, report and workshop hand-in |
+| Naive (return = 0), 252-session empirical quantiles | Baselines |
+| DLinear | First machine learning model of the MVP, light and CPU-friendly |
+| CEEMDAN + DLinear/LSTM | Main model: rolling-window CEEMDAN splits the price series into trend and short-term components used as inputs |
 
-### 6. Budget Estimation
-The budget estimate for the whole system uses the AWS Pricing Calculator table prepared by the team: [CẦN XÁC NHẬN: AWS Pricing Calculator link].
+External signals include the Geopolitical Risk index (GPR), OVX/GVZ volatility indices, an event calendar (FOMC, EIA inventory reports) and official Fed and EIA releases. All signals are aligned to **publication time** to avoid look-ahead leakage.
 
-### Infrastructure Costs
-- **Budget guardrail:** about 200 USD of AWS credit, AWS Budgets set at 50 USD/month, and Cost Anomaly Detection with email alerts.
-- **Cost per service (from the Pricing Calculator):** [CẦN XÁC NHẬN: per-service table from the team's Pricing Calculator estimate]
-- **Actual spend so far:** about 5.28 USD from 12/10 to 11/11/2026, covered by credit. The forecast for 12/11–29/11 was about 1.14 USD.
-- **Largest variable cost, the chatbot:** about 0.012 USD per question with Claude Haiku 4.5. The quota of 100 questions per day for the whole system caps it at about 1.2 USD per day, and about 36 USD per month in the worst case, which stays under the 50 USD budget.
-- **Cost-saving choices:** batch forecasts instead of a real-time endpoint, Lambda outside a VPC (no NAT Gateway), DynamoDB on-demand, 1-month log retention, at most 5 images per ECR repository.
+### Data Split and Evaluation
 
-### 7. Risk Assessment
-#### Risk Matrix
+| Period | Dates |
+|---|---|
+| CEEMDAN warm-up | 2012–2013 |
+| Training | 2014–2018 |
+| Validation (parameter selection) | 2019 |
+| Test (run once after parameters are locked) | 2020 → present |
 
-| Risk | Impact | Likelihood |
+- **Primary metric:** pinball skill against the 252-session quantile baseline.
+- **Interval calibration:** share of actual prices inside the 80% interval, interval width, interval score.
+- **Probability of an increase:** Brier skill.
+- **Model comparison:** Diebold–Mariano test.
+- **Not used:** MAPE or price-level errors, which create illusory accuracy.
+
+### Technical Requirements
+
+- **Languages and libraries:** Python (pandas, NumPy, PyTorch for training, NumPy for inference), React + TypeScript + Vite for the web.
+- **Infrastructure:** AWS CDK (Python), region ap-southeast-1.
+- **Process:** GitHub, one branch per task, Pull Requests need at least 1 approval and green CI; IAM/infrastructure changes require review by the security owner.
+
+---
+
+## 5. Timeline & Milestones
+
+| Phase | Activities |
+|---|---|
+| Pre-build (09–10/2026) | AWS fundamentals, topic selection, proposal, price data since 2012 |
+| Weeks 1–2 (12–25/10) | Architecture, clean data, target and evaluation, ingestion pipeline |
+| Weeks 3–4 (26/10–08/11) | Baselines, DLinear MVP, predict Lambda, first API and chatbot |
+| Weeks 5–6 (09–22/11) | Automated daily flow, news signals, evaluation; feature freeze on 22/11 |
+| Week 7 (23–29/11) | System stabilization, final report, rehearsal |
+| Late 11 – early 12/2026 | Presentation to the FCAJ-AWS internship committee |
+
+---
+
+## 6. Budget Estimation
+
+### AWS Costs
+
+| Service | Estimate/month |
+|---|---|
+| Lambda, EventBridge Scheduler, Step Functions | < 2 USD |
+| S3, DynamoDB (on-demand), ECR | 1–3 USD |
+| SageMaker AI Training Jobs (scheduled, stopped after each run) | 3–10 USD |
+| Amazon Bedrock (chatbot, news labeling) | 5–15 USD |
+| API Gateway, Cognito, Amplify Hosting, CloudWatch | 2–5 USD |
+| **Total** | **about 15–35 USD/month** |
+
+### Cost Optimization
+
+- No 24/7 endpoints, NAT Gateway or OpenSearch Serverless.
+- Batch prediction with Lambda instead of an always-on inference endpoint.
+- Rule-based chatbot routing: simple questions go to a smaller model, complex ones to a larger model; `max_tokens` limited by question type.
+- AWS Budgets alert at 50 USD/month.
+
+### Budget Control
+
+- All costs stay within the team's AWS credit (about 200 USD).
+- Every new resource is cost-estimated before being proposed.
+
+---
+
+## 7. Risk Assessment
+
+| Risk | Level | Mitigation |
 |---|---|---|
-| Yahoo Finance / yfinance blocks access or its terms forbid our use | High | Medium |
-| No model beats the 252-session baseline | Medium | High |
-| The chatbot misreads a number or drifts toward investment advice | High | Medium |
-| Bedrock cost grows with usage | Medium | Low |
-| Manual deployment from one machine breaks a setting (CORS origin, alarm email) | Medium | Medium |
-| An evaluation file is overwritten | Medium | Low |
-| The daily schedule silently does not run | Medium | Low |
+| Look-ahead leakage (full-series CEEMDAN, wrong scaling, misaligned news timestamps) | High | Rolling-window CEEMDAN, walk-forward backtest, publication-time alignment, automated tests |
+| Model fails to beat the statistical baseline | High | Honest reporting; the product uses the baseline until an ML model proves better |
+| Data sources change or become restricted | Medium | One primary source per series with a cross-check source (EIA); terms recorded in ADRs |
+| Chatbot fabricates numbers or is seen as investment advice | Medium | Tool use, citations, Guardrails, mandatory disclaimer |
+| Prompt injection through news content | Medium | Mark news as untrusted data, Guardrails |
+| Bedrock cost spikes from abuse | Medium | Cognito sign-in, rate limiting, Budgets alerts |
+| Scope creep | Medium | Must/Should/Could priorities, feature freeze on 22/11 |
 
-#### Mitigation Strategies
-- **Data source:** cite the source on the site, provide no price download, and keep a switch (`VITE_SHOW_METAL_PRICES=false`) that hides metal prices.
-- **Models:** keep the baseline in production and only change the published model when a pre-registered criterion is met and an ADR is written.
-- **Chatbot:** numbers only come from tools; citations are built on the server; a daily quota per user and for the whole system; and a benchmark with a policy check.
-- **Cost:** AWS Budgets, Cost Anomaly Detection and the chat quota.
-- **Deployment:** always run `cdk diff` first, deploy one stack at a time, one person at a time.
-- **Data safety:** S3 versioning (old versions kept 30 days), conditional writes, explicit deny on deleting evaluation artifacts.
-- **Missed runs:** a manual check after every 19:15 run until an "is it running" alarm exists.
+---
 
-#### Contingency Plans
-Every risky change can be undone with one deploy command or one web upload, without rebuilding images: turn the shadow model off, go back to an older predict or ingest image, turn the accuracy schedule off, point CORS back to `localhost`, or upload the previous web build. Data is not lost on rollback because the lake bucket is versioned and the forecast table and the user pool are kept (`RETAIN`) when a stack changes.
+## 8. Expected Outcomes
 
-### 8. Expected Outcomes
-#### Technical Improvements:
-- Forecasts published automatically every Tuesday to Saturday at 19:15 (Vietnam time), with no manual step.
-- A reliability block that is computed only from forecasts that were really published, and that is shown once 20 base dates are available.
-- A chatbot whose numbers always match the forecast page, with news sources it can cite.
+### Success Criteria
 
-#### Long-term Value
-- A reproducible, low-cost serverless template for a data + ML + GenAI product on AWS.
-- Clear next steps: signals beyond price data, switching the published model only through a new ADR, Bedrock Guardrails, a model router to lower chatbot cost, an alarm for missed runs, separate `dev`/`prod` environments with a deployment pipeline, and a price-history chart if the data source allows it.
+- A working web product on AWS that automatically collects data and forecasts all 4 assets every trading day.
+- The web shows forecast ranges, probability of an increase, USD/VND conversion and the last 8 weeks of accuracy.
+- The chatbot answers in Vietnamese, with numbers matching the database, cited reasons, and refusals for out-of-scope questions.
+- Costs stay within the AWS credit.
+
+### Long-term Value
+
+- An honest evaluation framework (statistical baseline, champion/challenger) reusable for other assets.
+- A data pipeline and infrastructure as code that make new features easy to add.
+
+### Note on Changes After the Proposal
+
+During the build, several decisions were adjusted and recorded in ADRs: price data moved to one consistent source per series (GLD, SLV, BZ=F, CL=F, VND=X) cross-checked with EIA; news uses only official Fed and EIA releases; API keys are stored in SSM Parameter Store; the MVP does not use Knowledge Bases yet; and the product currently uses the 252-session statistical baseline because DLinear did not beat it on the validation set.

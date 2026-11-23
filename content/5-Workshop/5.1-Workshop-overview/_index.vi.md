@@ -1,62 +1,73 @@
 ---
-title: "Tổng quan workshop"
-date: 2025-09-09
+title: "Giới thiệu"
+date: 2026-11-20
 weight: 1
 chapter: false
 pre: " <b> 5.1. </b> "
 ---
-
 #### Bài toán
 
-Giá vàng, bạc và dầu thô phản ứng rất nhanh với chiến sự, quyết định lãi suất hay quyết định sản lượng của OPEC+. Ở Việt Nam, giá vàng, bạc trong nước chạy theo giá thế giới, còn giá dầu thô ảnh hưởng tới giá xăng dầu bán lẻ, nên nhiều người quan tâm giá sắp tới sẽ đi đâu. Giá hôm nay thì dễ tra. Cái còn thiếu là một dự báo có con số, cho thấy mức không chắc chắn của nó, và có lịch sử đúng/sai để người dùng kiểm tra.
+Giá vàng, bạc và dầu thô biến động mạnh khi có sự kiện lớn. Người dùng phổ thông gặp ba khó khăn:
 
-#### CPAWS làm gì
+- **Khó biết giá sắp tới dao động trong khoảng nào:** nhận định trên báo chí thường là định tính, không có con số và không công bố độ chính xác trong quá khứ.
+- **Khó hiểu vì sao giá biến động:** tin tức nhiều và rời rạc.
+- **Khó liên hệ với tiền Việt:** giá thế giới tính bằng USD/ounce hay USD/thùng.
 
-Với mỗi tài sản và mỗi kỳ hạn h = 1–7 phiên giao dịch, website CPAWS cho xem:
+#### Giải pháp
 
-+ **khoảng dự báo**: phân vị 10%, 50% và 90% của return, quy đổi ra khoảng giá theo USD hoặc VND;
-+ **xác suất tăng**;
-+ **khối độ tin cậy** chấm điểm chính những dự báo hệ thống đã phát hành, khi đã có đủ dự báo tới hạn.
+CPAWS không dự báo một con số giá duy nhất. Hệ thống dự báo **phân phối log return h phiên tới** (h = 1–7) dưới dạng 7 phân vị (0,05 đến 0,95), rồi quy đổi thành:
 
-Một **chatbot** tiếng Việt chạy trên Amazon Bedrock giải thích dự báo và liệt kê các tin Fed/EIA liên quan kèm link. Mọi con số chatbot nói đều lấy từ hệ thống qua tool, và chatbot từ chối đưa lời khuyên đầu tư.
+- **Khoảng 80%** (từ phân vị 10% đến 90%) và trung vị, hiển thị theo USD và VND;
+- **Xác suất tăng** tại mỗi kỳ hạn;
+- **Độ tin cậy đo trên dữ liệu chạy thật** (`rolling_8w`): tỷ lệ giá thật rơi vào khoảng 80% trong 8 tuần gần nhất.
 
-| Tài sản | Chuỗi dùng để dự báo | Ghi chú |
+Chatbot tiếng Việt trả lời câu hỏi về các dự báo này. Mọi con số do tool đọc từ cơ sở dữ liệu, mọi tin tức có trích nguồn, và chatbot không tư vấn đầu tư.
+
+Mô hình đang phát hành (`baseline-q252`) là **mốc thống kê 252 phiên**: phân vị thực nghiệm của return trong khoảng một năm giao dịch gần nhất. Nhóm đã thử các mô hình học máy (DLinear, CEEMDAN, mô hình theo biến động), nhưng chưa mô hình nào vượt mốc này đủ chắc chắn theo tiêu chí chốt trước (mục [5.3.2](../5.3-data-and-model/5.3.2-baseline-forecast/)). Vì vậy web và chatbot luôn ghi rõ nguồn là "Mốc thống kê 252 phiên".
+
+#### Kiến trúc hiện trạng
+
+![Kiến trúc CPAWS hiện trạng](/images/5-Workshop/CPAWS-architecture-current.png)
+
+*Sơ đồ do nhóm CPAWS vẽ bằng draw.io (Khải chỉnh lại bố cục ngày 17/11/2026), hiện trạng ngày 13/11/2026. Mọi thành phần trên sơ đồ đã được triển khai và đang chạy.*
+
+Hệ thống gồm ba luồng:
+
+1. **Thu thập và dự báo hằng ngày** (19:15 giờ Việt Nam, thứ Ba–thứ Bảy). EventBridge Scheduler gọi Lambda `ingest` tải giá và ghi snapshot lên S3. Khi ingest kết thúc, dù thành công hay lỗi, Lambda Destinations gọi Lambda `predict`. Predict tính dự báo cho từng tài sản và ghi vào DynamoDB `cpaws-dev-forecasts`. Mỗi bản đã phát hành được ghi đúng một lần, không bị ghi đè.
+2. **Đo độ tin cậy** (20:45 giờ Việt Nam). Lambda `accuracy-job` so dự báo cũ với giá thật đã biết, rồi ghi kết quả vào bảng `cpaws-dev-accuracy`.
+3. **Phục vụ người dùng.** Web React trên Amplify Hosting đăng nhập bằng Cognito, gọi REST API (API Gateway + Cognito authorizer) để lấy dự báo (`/forecasts`), độ tin cậy (`/accuracy`) và hỏi chatbot (`/chat`). Lambda chat gọi Claude Haiku 4.5 trên Bedrock với hai tool `get_forecast` và `get_news`.
+
+Các phần vận hành chạy song song với ba luồng trên:
+- CloudWatch Logs, metric filter và 6 alarm gửi email qua Amazon SNS;
+- API key của EIA lưu trong SSM Parameter Store;
+- AWS Budgets theo dõi chi phí;
+- hạ tầng viết bằng CDK, chia thành 5 stack.
+
+#### Các stack CDK
+
+| Stack | Tài nguyên chính |
+|---|---|
+| `CpawsData` | S3 `cpaws-dev-lake`, ECR `cpaws-dev-ingest` và `cpaws-dev-predict`, Lambda `ingest`, `predict`, `accuracy-job`, hai lịch EventBridge Scheduler |
+| `CpawsServing` | DynamoDB `forecasts`, `news-labels`, `chat-usage`, `accuracy` (on-demand) |
+| `CpawsAuth` | Cognito User Pool, không cho tự đăng ký |
+| `CpawsApi` | REST API stage `dev`; Lambda `forecasts-api`, `accuracy-api`, `chat-api` |
+| `CpawsOps` | SNS topic cảnh báo, 6 CloudWatch alarm |
+
+Amplify Hosting, tham số SSM chứa API key và AWS Budgets được tạo ngoài CDK (xem [5.4](../5.4-infrastructure/)).
+
+#### So với bản đề xuất
+
+Trong quá trình làm, kiến trúc được rút gọn so với [bản đề xuất](../../2-proposal/). Mỗi thay đổi có ADR trong repo.
+
+| Bản đề xuất | Hiện trạng | Lý do |
 |---|---|---|
-| Vàng | GLD (ETF nắm giữ vàng thật) | Chuỗi đại diện; giá vàng trên web quy đổi từ GLD, không phải giá giao ngay |
-| Bạc | SLV (ETF nắm giữ bạc thật) | Chuỗi đại diện; giá bạc quy đổi từ SLV |
-| Brent | BZ=F (hợp đồng tương lai gần nhất) | Có bước nhảy vào ngày chuyển hợp đồng |
-| WTI | CL=F (hợp đồng tương lai gần nhất) | Có bước nhảy vào ngày chuyển hợp đồng |
+| Step Functions và SageMaker AI để huấn luyện lại hằng tuần | Hai Lambda nối bằng destination, không huấn luyện lại | Mốc 252 phiên không cần artifact mô hình; mô hình học máy chưa vượt mốc (ADR-0011, ADR-0012) |
+| Secrets Manager | SSM Parameter Store `SecureString` | Chỉ có một key, không cần xoay vòng tự động; chi phí gần như bằng 0 |
+| Gắn nhãn tin bằng Bedrock (Nova 2 Lite) | Gắn nhãn tay 2–3 thông cáo Fed/EIA mỗi tuần | Lần kiểm trên 49 thông cáo thật không đạt ngưỡng (ADR-0013) |
+| Router chọn giữa Nova và Haiku | Mọi câu hỏi đi Claude Haiku 4.5 | Router không đạt ngưỡng trên bộ câu giữ riêng (mục [5.5](../5.5-chatbot/)) |
+| Bedrock Guardrails, Knowledge Bases | Không bật | Kiểm soát bằng quy tắc prompt, tool và kiểm tra phía server (quyết định ngày 11/11/2026) |
 
-#### Vì sao dự báo return chứ không dự báo giá
+#### Demo sản phẩm
 
-Hệ thống dự báo phân phối của **log return** sau h phiên dưới dạng 7 phân vị (q05 đến q95), không dự báo thẳng mức giá. Giá ngày mai thường rất gần giá hôm nay, nên một "mô hình" chỉ lặp lại giá hôm nay đã trông gần như hoàn hảo nếu đo sai số trên mức giá. Dự báo return xóa đi ảo giác đó: mô hình chỉ được điểm cao khi thực sự học được điều gì đó về phần thay đổi. Sau đó web quy đổi phân vị ngược lại thành giá.
-
-Khoảng từ q10 đến q90 được gọi là **khoảng dự báo 80% danh nghĩa**. Tỷ lệ giá thật rơi vào khoảng này được đo riêng (`coverage_80`) và có thể khác 80%.
-
-#### Đang chạy gì trong production
-
-Dự báo phát hành cho cả 4 tài sản là `baseline-q252`, tức **mốc thống kê 252 phiên**: với mỗi h, lấy phân vị thực nghiệm của các return h phiên đã hoàn tất trong 252 phiên gần nhất. Mốc này không có tham số học. Nhóm đã thử 13 cấu hình mô hình khác và không cấu hình nào vượt mốc theo tiêu chí chốt trước mỗi thí nghiệm (chi tiết ở [5.11](../5.11-lessons-learned/)). Một challenger tên S1a chạy song song ở chế độ shadow; người dùng không thấy kết quả của nó.
-
-#### Thành viên nhóm
-
-| Thành viên | Vai trò | Phụ trách chính |
-|---|---|---|
-| Trịnh Tiến Khải | Research Lead | Mô hình, dữ liệu, Lambda predict, điều phối báo cáo |
-| Nguyễn Tiến Long | Modeling & Evaluation | Đánh giá, champion/challenger |
-| Phan Tấn Phước | News & Chatbot | Gắn nhãn tin, chatbot |
-| Châu Trần Mạnh Tiến | Platform | CDK, Lambda, web, deploy |
-| Huỳnh Ngọc Tuấn | Data & Security Lead | IAM, API Gateway, Cognito, DynamoDB, chi phí |
-
-Mã nguồn của nhóm để public; link ở mục [5.2](../5.2-prerequiste/).
-
-#### Bạn sẽ dựng được gì
-
-Cuối workshop, tài khoản của bạn sẽ chạy đủ 5 stack CDK giống nhóm, ở `ap-southeast-1`:
-
-+ một lịch chạy ingest → predict từ thứ Ba đến thứ Bảy lúc 19:15 giờ Việt Nam;
-+ 4 bảng DynamoDB và một data lake trên S3;
-+ một REST API có Cognito bảo vệ, gồm `GET /forecasts/{asset}`, `GET /accuracy/{asset}` và `POST /chat`;
-+ web chạy trên Amplify Hosting;
-+ 6 alarm CloudWatch gửi email qua SNS.
-
-Đăng ký tài khoản trên web: trong thời gian chấm, nhóm mở tự đăng ký có xác minh email (ADR-0014, deploy ngày 22/11/2026) và sẽ đóng lại sau khi chấm xong. Chi tiết ở [5.5.1](../5.5-api-and-chatbot/5.5.1-cognito-and-api/).
+- Video demo: [CẬP NHẬT LINK VIDEO]
+- Production (Amplify Hosting): [CẬP NHẬT LINK PRODUCTION]. Trang cần đăng nhập; tài khoản dùng thử cho người chấm được gửi kèm bài nộp, không ghi trên trang này.
