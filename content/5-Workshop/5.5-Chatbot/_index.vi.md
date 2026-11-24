@@ -118,5 +118,22 @@ Nhóm **không bật Bedrock Guardrails** trong phạm vi đồ án (quyết đ�
 - Lượt chính thức chỉ chạy **một lần**; không sửa prompt rồi chấm lại trên cùng bộ câu.
 - Prompt v4 không đạt lần chạy chính thức ngày 11/11/2026. Vì vậy Lambda giữ prompt v2. Chi phí cả lượt benchmark khoảng 0,73 USD.
 
+#### Hạn chế còn lại sau khi đóng băng
+
+Ngày 23–24/11/2026, nhóm hỏi thử chatbot trên Production với bản v1.0.1 và ghi nhận:
+
+- **Ngày giờ hiện tại đã đúng.** Từ v1.0.1, Lambda gửi kèm ngày giờ hiện tại theo giờ Việt Nam. Chatbot trả lời đúng "hôm nay" và hiểu "năm nay" là năm 2026.
+- **Chưa trả lời được câu hỏi về biến động giá đã qua**, ví dụ vì sao giá giảm trong một khoảng ngày. Chatbot chưa có tool đọc lịch sử giá nên chuyển sang nói về dự báo các phiên tới, rồi nhắc một tin cùng thời điểm. Cách trả lời này dễ khiến người đọc hiểu nhầm là tin đó gây ra mức giảm.
+- **Gọi tên xu hướng khi xác suất tăng chỉ quanh 50%.** Chatbot vẫn nói "xu hướng giảm", trong khi ở mức này nên nói là chưa rõ xu hướng. Web chỉ hiện nhãn xu hướng khi xác suất tăng từ 60% trở lên hoặc từ 40% trở xuống.
+- **Hiểu sai hai đầu của khoảng 80% (q10/q90).** Chatbot coi chúng là mức sàn và mức trần, viết thành "giảm tối đa" hay "tăng tối đa". Thực ra giá vẫn có thể ra ngoài khoảng này.
+- **Tự thêm nhận định không có trong tin**, chẳng hạn "lãi suất cao làm vàng kém hấp dẫn vì chi phí cơ hội tăng".
+- **Ngày đăng tin lệch một ngày.** Câu trả lời ghi ngày theo giờ UTC, còn thẻ Nguồn trên web đổi sang giờ Việt Nam.
+
+Các lỗi nội dung trên đến từ prompt v2 đang chạy trên Lambda. Sau khi đóng băng, nhóm không sửa prompt hay code nữa mà chỉ ghi lại. Hướng cải tiến về sau:
+
+- Thêm tool đọc lịch sử giá.
+- Quy định trong prompt cách gọi xu hướng và cách diễn giải khoảng dự báo.
+- Thống nhất múi giờ khi hiển thị ngày đăng tin.
+
 <!-- ẢNH: khung chat trên web: một câu hỏi dự báo + một câu hỏi tin tức có trích nguồn (CHE con số giá) -->
 <!-- ẢNH: câu hỏi xin tư vấn mua/bán và câu trả lời từ chối -->

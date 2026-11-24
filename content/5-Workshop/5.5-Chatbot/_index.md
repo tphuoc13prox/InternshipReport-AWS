@@ -118,5 +118,22 @@ The team **did not enable Bedrock Guardrails** within the project scope (decisio
 - The official run is done **once**; the prompt is never edited and re-scored on the same set.
 - Prompt v4 failed its official run on 11/11/2026, so the Lambda keeps prompt v2. The whole benchmark run cost about 0.73 USD.
 
+#### Remaining limitations after the freeze
+
+On 23–24/11/2026, the team tried the chatbot on Production with version v1.0.1 and noted the following:
+
+- **The current date and time are now correct.** Since v1.0.1, the Lambda also sends the current date and time in Vietnam time. The chatbot answers "today" correctly and understands "this year" as 2026.
+- **It cannot answer questions about past price moves yet**, for example why the price fell over a range of days. The chatbot has no tool that reads price history, so it switches to the forecast for the coming sessions and then mentions a news item from the same period. Readers can easily take this to mean that the news caused the drop.
+- **It names a trend when the probability of a rise is only around 50%.** The chatbot still says "downward trend", while at this level it should say the trend is unclear. The web app only shows a trend label when the probability of a rise is 60% or higher, or 40% or lower.
+- **It misreads the two ends of the 80% range (q10/q90).** The chatbot treats them as a floor and a ceiling and writes "falls at most" or "rises at most". In reality, the price can still move outside this range.
+- **It adds opinions that are not in the news**, such as "high interest rates make gold less attractive because the opportunity cost rises".
+- **News dates are off by one day.** The answer gives the date in UTC, while the Source card on the web app converts it to Vietnam time.
+
+The content errors above come from prompt v2, which is running on the Lambda. After the freeze, the team stopped changing the prompt or the code and only recorded these issues. Future improvements:
+
+- Add a tool that reads price history.
+- Define in the prompt how to name a trend and how to read the forecast range.
+- Use one time zone when showing news dates.
+
 <!-- ẢNH: khung chat trên web: một câu hỏi dự báo + một câu hỏi tin tức có trích nguồn (CHE con số giá) -->
 <!-- ẢNH: câu hỏi xin tư vấn mua/bán và câu trả lời từ chối -->
