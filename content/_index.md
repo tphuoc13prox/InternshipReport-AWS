@@ -19,7 +19,7 @@ chapter: false
 
 &emsp; **Major:** Information Technology – Artificial Intelligence
 
-&emsp; **Class:** 
+&emsp; **Class:** CPAWS
 
 &emsp; **Internship Company:** Amazon Web Services Viet Nam Company Limited
 

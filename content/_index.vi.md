@@ -19,7 +19,7 @@ chapter: false
 
 &emsp; **Ngành:** Công nghệ thông tin – Chuyên ngành Trí tuệ nhân tạo
 
-&emsp; **Lớp:** 
+&emsp; **Lớp:** CPAWS
 
 &emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Việt Nam
 
