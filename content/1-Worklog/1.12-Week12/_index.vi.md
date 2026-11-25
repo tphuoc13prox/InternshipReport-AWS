@@ -14,7 +14,7 @@ pre: " <b> 1.12. </b> "
 
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
 |:---:|---|:---:|:---:|---|
-| 2 | **- Báo cáo: kiểm tra lần cuối và nộp báo cáo (dự kiến)**<br>+ Kiểm tra link, các trang tiếng Anh và tiếng Việt, build Hugo<br>+ Deploy lên GitHub Pages và nộp báo cáo (hạn nộp 30/11/2026) | 30/11/2026 | 30/11/2026 | [FCAJ HCM Rules](https://hcm-rules.awsfcaj.com/) |
+| 2 | **- Báo cáo: kiểm tra lần cuối và nộp báo cáo**<br>+ Kiểm tra link, các trang tiếng Anh và tiếng Việt, build Hugo<br>+ Deploy lên GitHub Pages và nộp báo cáo (hạn nộp 30/11/2026) | 30/11/2026 | 30/11/2026 | [FCAJ HCM Rules](https://hcm-rules.awsfcaj.com/) |
 
 ### Kết quả đạt được tuần 12:
-1. Dự kiến: báo cáo thực tập được kiểm tra, deploy lên GitHub Pages và nộp đúng hạn 30/11/2026.
+1. Báo cáo thực tập đã được kiểm tra, deploy lên GitHub Pages và nộp đúng hạn 30/11/2026.
