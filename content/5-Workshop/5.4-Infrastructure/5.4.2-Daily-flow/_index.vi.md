@@ -108,6 +108,14 @@ aws scheduler get-schedule --name cpaws-dev-ingest-daily \
   --profile cpaws-dev --query "[State,ScheduleExpression]" --output text
 ```
 
-<!-- ẢNH: Console EventBridge Scheduler: lịch cpaws-dev-ingest-daily, trạng thái ENABLED -->
-<!-- ẢNH: Console Lambda cpaws-dev-ingest, tab Configuration > Destinations (OnSuccess, OnFailure -> predict) -->
-<!-- ẢNH: CloudWatch Logs của predict: dòng REPORT (Duration, Max Memory). KHÔNG chụp dòng PREDICT_DONE vì có giá -->
+![EventBridge Scheduler](/images/5-Workshop/5.4.2-scheduler.png)
+
+*Hai lịch `cpaws-dev-ingest-daily` và `cpaws-dev-accuracy-daily` đang Enabled, gọi Lambda `cpaws-dev-ingest` và `cpaws-dev-accuracy-job`.*
+
+![Lambda Destinations](/images/5-Workshop/5.4.2-lambda-destinations.png)
+
+*Tab Configuration > Destinations của `cpaws-dev-ingest`: cả On success và On failure đều chuyển tiếp sang `cpaws-dev-predict`.*
+
+![Log của predict](/images/5-Workshop/5.4.2-predict-logs.png)
+
+*Log một lượt chạy `cpaws-dev-predict` ngày 21/11/2026 (ngày cơ sở 20/11): cả 4 tài sản đều có `n_crossed=0`; dòng REPORT cho thấy hàm chạy khoảng 3,3 giây và dùng tối đa 258/1.024 MB bộ nhớ. Dòng `PREDICT_DONE` có giá nên đã được che.*

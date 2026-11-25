@@ -32,6 +32,8 @@ Base image là `public.ecr.aws/lambda/python:3.12`, **ghim theo digest** trong D
 
 #### Build và đẩy image
 
+Khi release sang `production`, nhóm không build lại image: bản `v1.0.1` dùng ingest `5cfde32`, predict `c61abdd` và job accuracy `e31c928` (job này chạy bằng image trong repo predict).
+
 Tag image bằng SHA ngắn của commit đã merge vào `developer`, không dùng `latest`:
 
 ```bash
@@ -81,5 +83,14 @@ cat out.json   # mỗi mã có rows khoảng 10 và error = null
 
 Nếu `dry_run` ổn, nạp lịch sử bằng event `{"start": "2012-01-01"}` (gọi `--invocation-type Event`), rồi kiểm tra trên S3 đã có `clean/prices/dt=<ngày>/`.
 
-<!-- ẢNH: Console ECR repo cpaws-dev-predict với các tag SHA (che Account ID trong URI) -->
-<!-- ẢNH: Console Lambda cpaws-dev-ingest: Image URI, memory, timeout (che Account ID) -->
+![ECR cpaws-dev-predict](/images/5-Workshop/5.4.1-ecr-predict.png)
+
+*Repo ECR `cpaws-dev-predict` có 4 image, mỗi image tag bằng SHA commit, dung lượng khoảng 301 MB.*
+
+![Các hàm Lambda](/images/5-Workshop/5.4.1-lambda-functions.png)
+
+*6 hàm Lambda của CPAWS: `ingest`, `predict`, `accuracy-job` chạy từ container image; `forecasts-api`, `accuracy-api`, `chat-api` là gói zip Python 3.12.*
+
+![Lambda cpaws-dev-ingest](/images/5-Workshop/5.4.1-lambda-ingest.png)
+
+*Hàm `cpaws-dev-ingest` thuộc stack `CpawsData`, Image URI trỏ tới tag `5cfde32`, kiến trúc x86_64. Account ID đã được che.*

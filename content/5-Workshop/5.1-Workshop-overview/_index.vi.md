@@ -49,7 +49,7 @@ Các phần vận hành chạy song song với ba luồng trên:
 |---|---|
 | `CpawsData` | S3 `cpaws-dev-lake`, ECR `cpaws-dev-ingest` và `cpaws-dev-predict`, Lambda `ingest`, `predict`, `accuracy-job`, hai lịch EventBridge Scheduler |
 | `CpawsServing` | DynamoDB `forecasts`, `news-labels`, `chat-usage`, `accuracy` (on-demand) |
-| `CpawsAuth` | Cognito User Pool, không cho tự đăng ký |
+| `CpawsAuth` | Cognito User Pool có xác minh email; tạm mở tự đăng ký trong thời gian chấm (đóng chậm nhất ngày 10/12/2026) |
 | `CpawsApi` | REST API stage `dev`; Lambda `forecasts-api`, `accuracy-api`, `chat-api` |
 | `CpawsOps` | SNS topic cảnh báo, 6 CloudWatch alarm |
 
@@ -70,4 +70,5 @@ Trong quá trình làm, kiến trúc được rút gọn so với [bản đề x
 #### Demo sản phẩm
 
 - Video demo: [CẬP NHẬT LINK VIDEO]
-- Production (Amplify Hosting): [CẬP NHẬT LINK PRODUCTION]. Trang cần đăng nhập; tài khoản dùng thử cho người chấm được gửi kèm bài nộp, không ghi trên trang này.
+- Production (Amplify Hosting): [CẬP NHẬT LINK PRODUCTION]. Trang giới thiệu xem được khi chưa đăng nhập; trang dự báo, độ chính xác, hướng dẫn đọc và chatbot cần tài khoản. Trong thời gian chấm, người chấm tự tạo tài khoản bằng nút **Tạo tài khoản** (xác minh qua email).
+- Mã nguồn: [CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting](https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting), nhánh `production` (tag `v1.0.1`).

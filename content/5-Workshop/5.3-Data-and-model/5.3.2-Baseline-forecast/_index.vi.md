@@ -97,4 +97,6 @@ Nhóm không dùng MAPE hay RMSE trên mức giá. Để so hai mô hình, nhóm
 
 Skill của S1a âm ở cả 4 tài sản trong năm 2023, và 18/42 kiểm định DM không xác định được. Nhóm quyết định **giữ `baseline-q252` tới hết kỳ thực tập**. Muốn chuyển sang S1a cho dầu và bạc thì phải có ADR mới; nhóm ghi việc này là hướng phát triển.
 
-<!-- ẢNH: trang web một tài sản: 7 thẻ kỳ hạn, nhãn "Mốc thống kê 252 phiên" (CHE mọi con số giá và khoảng giá) -->
+![Trang Vàng](/images/5-Workshop/5.3.2-asset-page.png)
+
+*Trang Vàng trên web, ngày cơ sở 20/11/2026: nhãn "Mốc thống kê 252 phiên" và 7 thẻ kỳ hạn, mỗi thẻ có xác suất tăng và khoảng 80% theo %. Các mức giá USD đã được che; giá vàng trên web là giá quy đổi từ quỹ GLD, không phải giá vàng giao ngay.*

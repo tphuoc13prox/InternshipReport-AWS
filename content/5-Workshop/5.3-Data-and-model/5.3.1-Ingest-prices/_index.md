@@ -72,4 +72,6 @@ pytest -q tests/test_data_ingest.py tests/test_lambda_ingest.py tests/test_data_
 
 When a main source fails (for example Yahoo returns 429 for one symbol), the other assets are still written. The failed asset keeps its old data with flag `stale_source`. The Lambda logs `INGEST_SOURCE_FAILED` and then raises an error so the alarm sends an email. The next successful run backfills the gap automatically.
 
-<!-- ẢNH: Console S3, thư mục clean/prices/ với các phân vùng dt=... (không mở file, không có số giá) -->
+![S3 clean/prices](/images/5-Workshop/5.3.1-s3-clean-prices.png)
+
+*Folder `clean/prices/` in bucket `cpaws-dev-lake`: each ingest run creates one `dt=<date>` partition; the first one is `dt=2026-10-15`.*

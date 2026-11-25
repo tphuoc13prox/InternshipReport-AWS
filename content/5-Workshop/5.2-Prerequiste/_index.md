@@ -21,7 +21,7 @@ pre: " <b> 5.2. </b> "
 ```bash
 git clone https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting.git
 cd CPAWS-commodity-forecasting
-git switch developer
+git switch production   # submitted version (tag v1.0.1); use branch developer for further work
 
 python -m venv .venv
 source .venv/bin/activate            # Windows: .venv\Scripts\activate
@@ -70,4 +70,6 @@ unset EIA_KEY
 The team repository is public. Never commit API keys, passwords, personal email addresses or a full Account ID. Pre-commit runs `gitleaks` and `detect-aws-credentials` to block them before a commit. In this workshop, `<ACCOUNT_ID>` is where you put your own account.
 {{% /notice %}}
 
-<!-- ẢNH: Console AWS Budgets, budget 50 USD (che email và Account ID) -->
+![AWS Budgets](/images/5-Workshop/5.2-budgets.png)
+
+*AWS Budgets has two budgets: `cpaws-monthly-cost-budget` at 50 USD/month and a 1 USD budget that alerts as soon as any cost appears. Both are OK.*

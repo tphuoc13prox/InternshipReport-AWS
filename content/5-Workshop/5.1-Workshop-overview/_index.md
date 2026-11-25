@@ -49,7 +49,7 @@ Operations run alongside these flows:
 |---|---|
 | `CpawsData` | S3 `cpaws-dev-lake`, ECR `cpaws-dev-ingest` and `cpaws-dev-predict`, Lambda `ingest`, `predict`, `accuracy-job`, two EventBridge Scheduler schedules |
 | `CpawsServing` | DynamoDB `forecasts`, `news-labels`, `chat-usage`, `accuracy` (on-demand) |
-| `CpawsAuth` | Cognito User Pool, self sign-up disabled |
+| `CpawsAuth` | Cognito User Pool with email verification; self sign-up is open temporarily during grading (closed by 10/12/2026 at the latest) |
 | `CpawsApi` | REST API stage `dev`; Lambda `forecasts-api`, `accuracy-api`, `chat-api` |
 | `CpawsOps` | SNS alarm topic, 6 CloudWatch alarms |
 
@@ -70,4 +70,5 @@ During the project the architecture was simplified relative to the [proposal](..
 #### Product demo
 
 - Demo video: [LINK TO BE ADDED]
-- Production (Amplify Hosting): [LINK TO BE ADDED]. The site requires sign-in; a trial account for graders is sent with the submission and is not written on this page.
+- Production (Amplify Hosting): [LINK TO BE ADDED]. The landing page is public; the forecast, accuracy, reading-guide and chatbot pages need an account. During grading, graders create their own account with the **Tạo tài khoản** (Create account) button, verified by email.
+- Source code: [CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting](https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting), branch `production` (tag `v1.0.1`).

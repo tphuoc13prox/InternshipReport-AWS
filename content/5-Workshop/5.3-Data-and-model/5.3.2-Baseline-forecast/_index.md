@@ -97,4 +97,6 @@ The team does not use MAPE or RMSE on price levels. To compare two models, it us
 
 S1a's skill was negative for all 4 assets in 2023, and 18/42 DM tests could not be computed. The team decided to **keep `baseline-q252` until the end of the internship**. Switching oil and silver to S1a would require a new ADR; the team lists it as future work.
 
-<!-- ẢNH: trang web một tài sản: 7 thẻ kỳ hạn, nhãn "Mốc thống kê 252 phiên" (CHE mọi con số giá và khoảng giá) -->
+![Gold page](/images/5-Workshop/5.3.2-asset-page.png)
+
+*The Gold page of the web app, base date 20/11/2026: the "Mốc thống kê 252 phiên" (252-session statistical baseline) label and 7 horizon cards, each with the probability of a rise and the 80% range in %. USD price levels are hidden; gold prices on the web app are converted from the GLD fund, not spot gold prices.*

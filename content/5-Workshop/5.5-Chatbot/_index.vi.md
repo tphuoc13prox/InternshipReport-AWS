@@ -18,8 +18,8 @@ Chatbot giúp người dùng đọc dự báo bằng tiếng Việt: hỏi về 
 1. API Gateway kiểm tra ID token bằng Cognito authorizer. Người dùng được xác định bằng claim `sub`, không dùng email.
 2. Lambda `cpaws-dev-chat-api` (Python 3.12, 512 MB, timeout 28 giây) kiểm tra request: câu hỏi dài 1–500 ký tự, lịch sử hội thoại tối đa 6 lượt do client gửi lên. Server không lưu hội thoại.
 3. **Kiểm tra hạn thời gian.** Lambda tính hạn chót từ thời điểm API Gateway nhận request (29 giây trừ 4 giây dự phòng). Nếu không còn đủ thời gian cho một lần gọi model thì trả `504` trước khi tính lượt.
-4. **Tính lượt hỏi** bằng một lần ghi DynamoDB có điều kiện vào bảng `chat-usage`. Giới hạn là 20 lượt/người/ngày và 100 lượt/ngày cho cả hệ thống; hết lượt thì trả `429`. Bảng chỉ lưu bộ đếm, không lưu câu hỏi.
-5. **Gọi Bedrock Converse** với system prompt `chatbot-haiku-v2`, hai tool, tối đa 3 vòng gọi tool.
+4. **Tính lượt hỏi** bằng một lần ghi DynamoDB có điều kiện vào bảng `chat-usage`. Giới hạn là 20 lượt/người/ngày và 100 lượt/ngày cho cả hệ thống; hết lượt thì trả `429`. Bộ đếm làm mới lúc 00:00 giờ Việt Nam, và web hiện số lượt còn lại ngay dưới ô nhập. Bảng chỉ lưu bộ đếm, không lưu câu hỏi.
+5. **Gọi Bedrock Converse** với system prompt `chatbot-haiku-v2`, hai tool, tối đa 3 vòng gọi tool. Từ bản `v1.0.1`, Lambda gửi thêm một khối `system` thứ hai ghi ngày giờ hiện tại theo giờ Việt Nam (UTC+7).
 6. **Trả kết quả:**
    - câu trả lời dạng văn bản thuần;
    - `citations` (danh sách tin đã trích);
@@ -37,6 +37,10 @@ Chatbot giúp người dùng đọc dự báo bằng tiếng Việt: hỏi về 
 | Không dùng | Knowledge Bases, embedding, fine-tune. Tin tức đọc trực tiếp từ dữ liệu đã gắn nhãn |
 
 Dùng inference profile global thì Bedrock có thể xử lý request ở region khác. Nhóm ghi rõ trong ADR-0004 rằng không cam kết mọi request được xử lý hoàn toàn trong Singapore.
+
+#### Chatbot biết ngày hiện tại (v1.0.1)
+
+Đến bản `v1.0.0`, model không biết hôm nay là ngày nào. Khi nhóm hỏi thử ngày 23/11/2026, cụm "từ 9/11 đến 20/11 năm nay" bị hiểu thành năm 2024, còn "hôm nay" bị nhầm với ngày cơ sở của dự báo. Bản `v1.0.1` sửa lỗi này bằng một khối `system` thứ hai, tạo lúc nhận request, ghi thứ, ngày và giờ theo UTC+7. Nội dung prompt `chatbot-haiku-v2` không đổi vì đã khóa sau benchmark. Thay đổi đến sau benchmark nên chỉ được kiểm bằng unit test và hỏi thử trên Production ngày 24/11/2026: chatbot trả lời đúng ngày, năm hiện tại và tìm đúng tin của năm 2026.
 
 #### Router: một kết quả âm có kiểm soát
 
@@ -118,11 +122,26 @@ Nhóm **không bật Bedrock Guardrails** trong phạm vi đồ án (quyết đ�
 - Lượt chính thức chỉ chạy **một lần**; không sửa prompt rồi chấm lại trên cùng bộ câu.
 - Prompt v4 không đạt lần chạy chính thức ngày 11/11/2026. Vì vậy Lambda giữ prompt v2. Chi phí cả lượt benchmark khoảng 0,73 USD.
 
+#### Chatbot trên web
+
+Ảnh chụp trên Production ngày 24/11/2026 (bản v1.0.1). Thông tin tài khoản, mã nội bộ của từng câu trả lời và các mức giá USD phía sau khung chat đã được che.
+
+![Hỏi dự báo](/images/5-Workshop/5.5-chat-forecast-news1.png)
+
+*Câu hỏi về dự báo vàng 7 phiên tới: chatbot nêu khoảng 80%, trung vị và xác suất tăng theo %, ghi rõ chuỗi đại diện GLD và mốc thống kê 252 phiên, kèm câu disclaimer.*
+
+![Hỏi tin tức](/images/5-Workshop/5.5-chat-forecast-news2.png)
+
+*Câu hỏi về tin Fed: trong 7 ngày gần nhất không có tin Fed đã gắn nhãn liên quan tới vàng, nên chatbot trả lời là không tìm thấy thay vì tự nghĩ ra tin.*
+
+![Từ chối tư vấn](/images/5-Workshop/5.5-chat-refuse-advice.png)
+
+*Câu hỏi "có nên mua vàng không?": chatbot từ chối tư vấn đầu tư và chỉ nhắc lại số dự báo. Dưới ô nhập là số lượt hỏi còn lại trong ngày và giờ làm mới lượt.*
+
 #### Hạn chế còn lại sau khi đóng băng
 
 Ngày 23–24/11/2026, nhóm hỏi thử chatbot trên Production với bản v1.0.1 và ghi nhận:
 
-- **Ngày giờ hiện tại đã đúng.** Từ v1.0.1, Lambda gửi kèm ngày giờ hiện tại theo giờ Việt Nam. Chatbot trả lời đúng "hôm nay" và hiểu "năm nay" là năm 2026.
 - **Chưa trả lời được câu hỏi về biến động giá đã qua**, ví dụ vì sao giá giảm trong một khoảng ngày. Chatbot chưa có tool đọc lịch sử giá nên chuyển sang nói về dự báo các phiên tới, rồi nhắc một tin cùng thời điểm. Cách trả lời này dễ khiến người đọc hiểu nhầm là tin đó gây ra mức giảm.
 - **Gọi tên xu hướng khi xác suất tăng chỉ quanh 50%.** Chatbot vẫn nói "xu hướng giảm", trong khi ở mức này nên nói là chưa rõ xu hướng. Web chỉ hiện nhãn xu hướng khi xác suất tăng từ 60% trở lên hoặc từ 40% trở xuống.
 - **Hiểu sai hai đầu của khoảng 80% (q10/q90).** Chatbot coi chúng là mức sàn và mức trần, viết thành "giảm tối đa" hay "tăng tối đa". Thực ra giá vẫn có thể ra ngoài khoảng này.
@@ -134,6 +153,3 @@ Các lỗi nội dung trên đến từ prompt v2 đang chạy trên Lambda. Sau
 - Thêm tool đọc lịch sử giá.
 - Quy định trong prompt cách gọi xu hướng và cách diễn giải khoảng dự báo.
 - Thống nhất múi giờ khi hiển thị ngày đăng tin.
-
-<!-- ẢNH: khung chat trên web: một câu hỏi dự báo + một câu hỏi tin tức có trích nguồn (CHE con số giá) -->
-<!-- ẢNH: câu hỏi xin tư vấn mua/bán và câu trả lời từ chối -->

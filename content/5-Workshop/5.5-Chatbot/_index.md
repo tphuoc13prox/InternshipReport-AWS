@@ -18,8 +18,8 @@ The chatbot helps users read the forecasts in Vietnamese: questions about gold, 
 1. API Gateway checks the ID token with the Cognito authorizer. The user is identified by the `sub` claim, not by email.
 2. Lambda `cpaws-dev-chat-api` (Python 3.12, 512 MB, 28-second timeout) validates the request: a question of 1–500 characters and at most 6 turns of history sent by the client. The server does not store conversations.
 3. **Deadline check.** The Lambda computes a deadline from the time API Gateway received the request (29 seconds minus 4 seconds of margin). If there is not enough time left for one model call, it returns `504` before counting the question.
-4. **Count the question** with one conditional DynamoDB write to table `chat-usage`. The limits are 20 questions per user per day and 100 per day for the whole system; beyond that it returns `429`. The table only stores counters, never questions.
-5. **Call Bedrock Converse** with system prompt `chatbot-haiku-v2`, two tools, and at most 3 tool rounds.
+4. **Count the question** with one conditional DynamoDB write to table `chat-usage`. The limits are 20 questions per user per day and 100 per day for the whole system; beyond that it returns `429`. The counters reset at 00:00 Vietnam time, and the web app shows the questions left just below the input box. The table only stores counters, never questions.
+5. **Call Bedrock Converse** with system prompt `chatbot-haiku-v2`, two tools, and at most 3 tool rounds. Since `v1.0.1`, the Lambda also sends a second `system` block with the current date and time in Vietnam time (UTC+7).
 6. **Return the result:**
    - the answer as plain text;
    - `citations` (the news items cited);
@@ -37,6 +37,10 @@ The chatbot helps users read the forecasts in Vietnamese: questions about gold, 
 | Not used | Knowledge Bases, embeddings, fine-tuning. News is read directly from labelled data |
 
 With the global inference profile, Bedrock may process a request in another region. ADR-0004 states that the team does not guarantee every request is processed entirely in Singapore.
+
+#### The chatbot knows today's date (v1.0.1)
+
+Up to `v1.0.0`, the model did not know the current date. When the team tested it on 23/11/2026, "from 9/11 to 20/11 this year" was read as 2024, and "today" was confused with the forecast's base date. Version `v1.0.1` fixes this with a second `system` block, built when the request arrives, stating the weekday, date and time in UTC+7. The text of prompt `chatbot-haiku-v2` is unchanged because it was locked after the benchmark. Since the change came after the benchmark, it was checked only with unit tests and by asking on Production on 24/11/2026: the chatbot gave the right date and year and found the 2026 news items.
 
 #### Router: a controlled negative result
 
@@ -118,11 +122,26 @@ The team **did not enable Bedrock Guardrails** within the project scope (decisio
 - The official run is done **once**; the prompt is never edited and re-scored on the same set.
 - Prompt v4 failed its official run on 11/11/2026, so the Lambda keeps prompt v2. The whole benchmark run cost about 0.73 USD.
 
+#### The chatbot on the web app
+
+Screenshots taken on Production on 24/11/2026 (version v1.0.1). Account details, the internal ID of each answer and the USD price levels behind the chat window are hidden.
+
+![Forecast question](/images/5-Workshop/5.5-chat-forecast-news1.png)
+
+*A question about the gold forecast for the next 7 sessions: the chatbot gives the 80% range, the median and the probability of a rise in %, names the GLD proxy series and the 252-session statistical baseline, and adds the disclaimer.*
+
+![News question](/images/5-Workshop/5.5-chat-forecast-news2.png)
+
+*A question about Fed news: no labelled Fed item related to gold exists in the last 7 days, so the chatbot says it found none instead of making one up.*
+
+![Refusing advice](/images/5-Workshop/5.5-chat-refuse-advice.png)
+
+*The question "có nên mua vàng không?" (should I buy gold?): the chatbot refuses to give investment advice and only repeats the forecast numbers. Below the input box are the questions left for the day and the time the quota resets.*
+
 #### Remaining limitations after the freeze
 
 On 23–24/11/2026, the team tried the chatbot on Production with version v1.0.1 and noted the following:
 
-- **The current date and time are now correct.** Since v1.0.1, the Lambda also sends the current date and time in Vietnam time. The chatbot answers "today" correctly and understands "this year" as 2026.
 - **It cannot answer questions about past price moves yet**, for example why the price fell over a range of days. The chatbot has no tool that reads price history, so it switches to the forecast for the coming sessions and then mentions a news item from the same period. Readers can easily take this to mean that the news caused the drop.
 - **It names a trend when the probability of a rise is only around 50%.** The chatbot still says "downward trend", while at this level it should say the trend is unclear. The web app only shows a trend label when the probability of a rise is 60% or higher, or 40% or lower.
 - **It misreads the two ends of the 80% range (q10/q90).** The chatbot treats them as a floor and a ceiling and writes "falls at most" or "rises at most". In reality, the price can still move outside this range.
@@ -134,6 +153,3 @@ The content errors above come from prompt v2, which is running on the Lambda. Af
 - Add a tool that reads price history.
 - Define in the prompt how to name a trend and how to read the forecast range.
 - Use one time zone when showing news dates.
-
-<!-- ẢNH: khung chat trên web: một câu hỏi dự báo + một câu hỏi tin tức có trích nguồn (CHE con số giá) -->
-<!-- ẢNH: câu hỏi xin tư vấn mua/bán và câu trả lời từ chối -->

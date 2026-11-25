@@ -72,4 +72,6 @@ pytest -q tests/test_data_ingest.py tests/test_lambda_ingest.py tests/test_data_
 
 Khi một nguồn chính lỗi (ví dụ Yahoo trả lỗi 429 cho một mã), các tài sản khác vẫn được ghi. Tài sản lỗi giữ dữ liệu cũ, có cờ `stale_source`. Lambda ghi log `INGEST_SOURCE_FAILED` rồi báo lỗi để alarm gửi email. Lần chạy thành công kế tiếp tự tải bù phần còn thiếu.
 
-<!-- ẢNH: Console S3, thư mục clean/prices/ với các phân vùng dt=... (không mở file, không có số giá) -->
+![S3 clean/prices](/images/5-Workshop/5.3.1-s3-clean-prices.png)
+
+*Thư mục `clean/prices/` trong bucket `cpaws-dev-lake`: mỗi lượt ingest tạo một phân vùng `dt=<ngày>`, phân vùng đầu tiên là `dt=2026-10-15`.*

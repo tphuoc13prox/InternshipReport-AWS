@@ -13,7 +13,9 @@ Every push and pull request runs:
 - **Web:** `npm ci`, `typecheck`, `test`, `build`.
 - **Pre-commit:** `gitleaks`, `detect-aws-credentials`, to block keys and Account IDs before they reach the public repository.
 
-CI **does not deploy**. Branch `developer` needs at least 1 approval to merge.
+CI **does not deploy**. Branch `developer` needs at least 1 approval to merge; branch `production` only accepts release PRs from `developer`.
+
+In the submitted version (branch `production`, commit `ac1a31a`, same content as `developer`): **pytest 1,658 tests passed, 2 skipped** (including the CDK synth tests), **web 265 tests passed**, `ruff` reports no issues, and CI was green on every PR before merge.
 
 #### Tests after each deployment
 
@@ -68,13 +70,17 @@ All Lambda log groups keep logs for 1 month.
 
 #### Reliability measured on live data
 
-Job `cpaws-dev-accuracy-job` runs at 20:45 Vietnam time, Tuesday–Saturday. It compares published forecasts with realized prices now known and computes `coverage_80`, `width_80` and the other metrics over the last 8 weeks. Until there are 20 base dates, the web app shows "Đang thu thập (n/20)" ("Collecting") instead of numbers. The first scheduled run took place on 12/11/2026: 4/4 assets completed in 30.3 seconds, the alarm stayed OK, at level 9/20.
+Job `cpaws-dev-accuracy-job` runs at 20:45 Vietnam time, Tuesday–Saturday. It compares published forecasts with realized prices now known and computes `coverage_80`, `width_80` and the other metrics over the last 8 weeks. Until there are 20 base dates, the web app shows "Đang thu thập (n/20)" ("Collecting") instead of numbers. The first scheduled run took place on 12/11/2026: 4/4 assets completed in 30.3 seconds, the alarm stayed OK, at level 9/20. By the run of 21/11/2026, the last one before the freeze, all 4 assets were at 16/20.
 
 #### Remaining limitations
 
 - The alarms cannot detect a schedule that **did not run**, because missing data is treated as normal. For now the team checks by hand after each 19:15 run. Planned fix: an alarm on the ingest Lambda's invocation count that fires when there is no run for 3 days in a row.
 - There is only one `dev` environment, deployed by hand from one machine, with no staging.
 
-<!-- ẢNH: GitHub Actions: một lần chạy CI xanh -->
-<!-- ẢNH: CloudWatch > Alarms: 6 alarm ở trạng thái OK -->
-<!-- ẢNH: khối "Độ tin cậy" trên web, hiện "Đang thu thập (n/20)" -->
+![CloudWatch alarms](/images/5-Workshop/5.6-alarms.png)
+
+*The 6 CPAWS alarms in CloudWatch are all OK with Actions enabled; each one fires on 1 or more errors within 5 minutes.*
+
+![Accuracy page](/images/5-Workshop/5.6-reliability.png)
+
+*Top of the Accuracy page: the assets are still "Đang thu thập (16/20)" (collecting), counted from 29/10/2026, so the web app does not show an official result yet.*
