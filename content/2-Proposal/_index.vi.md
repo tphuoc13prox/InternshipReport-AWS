@@ -13,7 +13,7 @@ pre: " <b> 2. </b> "
 
 ## 1. Tóm tắt chung
 
-Chúng tôi là nhóm **CPAWS** gồm 5 sinh viên thực tập trong chương trình AWS First Cloud AI Journey (FCAJ). Nhóm xây dựng một nền tảng web dự đoán giá **vàng, bạc, dầu Brent và dầu WTI** trong **1–7 ngày tới**, hiển thị theo cả **USD và VND**, kèm **chatbot tiếng Việt trên Amazon Bedrock** giải thích vì sao giá có thể tăng hay giảm dựa trên số liệu của mô hình và tin tức có trích nguồn.
+Chúng em là nhóm **CPAWS** gồm 5 sinh viên thực tập trong chương trình AWS First Cloud AI Journey (FCAJ). Nhóm xây dựng một nền tảng web dự đoán giá **vàng, bạc, dầu Brent và dầu WTI** trong **1–7 ngày tới**, hiển thị theo cả **USD và VND**, kèm **chatbot tiếng Việt trên Amazon Bedrock** giải thích vì sao giá có thể tăng hay giảm dựa trên số liệu của mô hình và tin tức có trích nguồn.
 
 | Thành viên | Vai trò |
 |---|---|
