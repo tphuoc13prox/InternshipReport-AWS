@@ -69,6 +69,6 @@ Trong quá trình làm, kiến trúc được rút gọn so với [bản đề x
 
 #### Demo sản phẩm
 
-- Video demo: [CẬP NHẬT LINK VIDEO]
+- Video demo: [https://www.youtube.com/watch?v=useqd8Wokqw](https://www.youtube.com/watch?v=useqd8Wokqw)
 - Production (Amplify Hosting): [CẬP NHẬT LINK PRODUCTION]. Trang giới thiệu xem được khi chưa đăng nhập; trang dự báo, độ chính xác, hướng dẫn đọc và chatbot cần tài khoản. Trong thời gian chấm, người chấm tự tạo tài khoản bằng nút **Tạo tài khoản** (xác minh qua email).
 - Mã nguồn: [CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting](https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting), nhánh `production` (tag `v1.0.1`).

@@ -69,6 +69,6 @@ During the project the architecture was simplified relative to the [proposal](..
 
 #### Product demo
 
-- Demo video: [LINK TO BE ADDED]
+- Demo video: [https://www.youtube.com/watch?v=useqd8Wokqw](https://www.youtube.com/watch?v=useqd8Wokqw)
 - Production (Amplify Hosting): [LINK TO BE ADDED]. The landing page is public; the forecast, accuracy, reading-guide and chatbot pages need an account. During grading, graders create their own account with the **Tạo tài khoản** (Create account) button, verified by email.
 - Source code: [CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting](https://github.com/CPAWS-AWS-FCAJ/CPAWS-commodity-forecasting), branch `production` (tag `v1.0.1`).
