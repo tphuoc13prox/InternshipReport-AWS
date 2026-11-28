@@ -6,12 +6,12 @@ chapter: false
 pre: " <b> 6. </b> "
 ---
 
-Từ **14/09/2026** đến **14/12/2026**, tôi thực tập trong chương trình First Cloud AI Journey tại **Công ty TNHH Amazon Web Services Việt Nam**, nơi tôi được đem những gì đã học ở trường vào một dự án thật và một nhóm làm việc thật.  
-Tôi tham gia **CPAWS – Dự báo giá hàng hóa trên AWS**, dự án nhóm năm người, và phụ trách mảng tin tức và chatbot: chatbot Bedrock phía sau `POST /chat`, các tool, prompt và benchmark của nó, cùng CI của repo. Qua đó tôi cải thiện kỹ năng **kiến trúc serverless trên AWS, hạ tầng dạng code với AWS CDK, xây dựng và đánh giá ứng dụng LLM trên Amazon Bedrock, review code qua pull request và viết tài liệu kỹ thuật**.  
+Từ **14/09/2026** đến **14/12/2026**, em thực tập trong chương trình First Cloud AI Journey tại **Công ty TNHH Amazon Web Services Việt Nam**, nơi em được đem những gì đã học ở trường vào một dự án thật và một nhóm làm việc thật.  
+Em tham gia **CPAWS – Dự báo giá hàng hóa trên AWS**, dự án nhóm năm người, và phụ trách mảng tin tức và chatbot: chatbot Bedrock phía sau `POST /chat`, các tool, prompt và benchmark của nó, cùng CI của repo. Qua đó em cải thiện kỹ năng **kiến trúc serverless trên AWS, hạ tầng dạng code với AWS CDK, xây dựng và đánh giá ứng dụng LLM trên Amazon Bedrock, review code qua pull request và viết tài liệu kỹ thuật**.  
 
-Tôi cố gắng hoàn thành công việc đúng hạn, tuân thủ quy tắc làm việc của nhóm (pull request có review, khung giờ deploy, không để bí mật trong repo public) và giữ liên lạc thường xuyên với các bạn trong nhóm để phát hiện vấn đề sớm.
+Em cố gắng hoàn thành công việc đúng hạn, tuân thủ quy tắc làm việc của nhóm (pull request có review, khung giờ deploy, không để bí mật trong repo public) và giữ liên lạc thường xuyên với các bạn trong nhóm để phát hiện vấn đề sớm.
 
-Để nhìn lại quá trình thực tập một cách khách quan nhất có thể, tôi tự đánh giá theo các tiêu chí dưới đây:
+Để nhìn lại quá trình thực tập một cách khách quan nhất có thể, em tự đánh giá theo các tiêu chí dưới đây:
 
 | STT | Tiêu chí                            | Mô tả                                                                                            | Tốt | Khá | Trung bình |
 | --- | ----------------------------------- | ------------------------------------------------------------------------------------------------ | --- | --- | ---------- |

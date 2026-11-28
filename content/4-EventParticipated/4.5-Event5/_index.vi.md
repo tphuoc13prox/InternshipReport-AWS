@@ -99,15 +99,15 @@ pre: " <b> 4.5. </b> "
 
 ### Trải nghiệm sự kiện
 
-Tham gia "FCAJ x FPTU: Cloud Mastery 1" giúp tôi có cái nhìn thực tế về những gì cần làm để đưa một ứng dụng AI từ prototype lên production trên AWS.
+Tham gia "FCAJ x FPTU: Cloud Mastery 1" giúp em có cái nhìn thực tế về những gì cần làm để đưa một ứng dụng AI từ prototype lên production trên AWS.
 
-Phần đầu tiên rất dễ theo dõi vì bốn trụ cột của AI trên production được giải thích qua ví dụ về một chuỗi nhà hàng. Nhờ đó tôi nhận ra một model chạy tốt trong bản demo khác rất xa một hệ thống phải luôn an toàn, mở rộng được và có chi phí hợp lý khi phục vụ nhiều người dùng.
+Phần đầu tiên rất dễ theo dõi vì bốn trụ cột của AI trên production được giải thích qua ví dụ về một chuỗi nhà hàng. Nhờ đó em nhận ra một model chạy tốt trong bản demo khác rất xa một hệ thống phải luôn an toàn, mở rộng được và có chi phí hợp lý khi phục vụ nhiều người dùng.
 
 Các case study của Cox Automotive và Mobileye đặc biệt có giá trị vì cho thấy kết quả cụ thể của những doanh nghiệp đang chạy AI agent trên production. Chúng cũng cho thấy phần lớn công sức nằm ở bảo mật, tích hợp với hệ thống sẵn có và đo lường, chứ không chỉ ở bản thân model.
 
-Các phần sau về Amazon Bedrock AgentCore giúp tôi nắm được bức tranh tổng thể về các thành phần của nó, từ Runtime, Identity đến Gateway, Memory và Observability. Vì tôi phụ trách chatbot trong dự án của nhóm, các nội dung về guardrails, quyền truy cập tối thiểu và observability liên quan trực tiếp đến công việc của tôi.
+Các phần sau về Amazon Bedrock AgentCore giúp em nắm được bức tranh tổng thể về các thành phần của nó, từ Runtime, Identity đến Gateway, Memory và Observability. Vì em phụ trách chatbot trong dự án của nhóm, các nội dung về guardrails, quyền truy cập tối thiểu và observability liên quan trực tiếp đến công việc của em.
 
-Nhìn chung, sự kiện giúp tôi hiểu sâu hơn cách các AI agent doanh nghiệp được xây dựng và vận hành trên AWS, đồng thời cho thấy tầm quan trọng của bảo mật, khả năng giám sát và thiết kế cẩn thận khi đưa AI vào production.
+Nhìn chung, sự kiện giúp em hiểu sâu hơn cách các AI agent doanh nghiệp được xây dựng và vận hành trên AWS, đồng thời cho thấy tầm quan trọng của bảo mật, khả năng giám sát và thiết kế cẩn thận khi đưa AI vào production.
 
 ### Một số hình ảnh sự kiện
 

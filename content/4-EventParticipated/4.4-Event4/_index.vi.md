@@ -76,15 +76,15 @@ pre: " <b> 4.4. </b> "
 
 ### Trải nghiệm sự kiện
 
-Tham gia hoạt động thiện nguyện "Smart Plushies for Children" cho tôi một góc nhìn khác về công nghệ, bên ngoài các workshop kỹ thuật của chương trình FCAJ.
+Tham gia hoạt động thiện nguyện "Smart Plushies for Children" cho em một góc nhìn khác về công nghệ, bên ngoài các workshop kỹ thuật của chương trình FCAJ.
 
-Sự kiện cho tôi thấy công nghệ có thể mang lại niềm vui cho mọi người một cách rất trực tiếp. Biết rằng những chú thú bông sẽ được trao cho các em nhỏ được Operation Smile Việt Nam hỗ trợ khiến hoạt động này ý nghĩa hơn nhiều so với một bài lab thực hành thông thường.
+Sự kiện cho em thấy công nghệ có thể mang lại niềm vui cho mọi người một cách rất trực tiếp. Biết rằng những chú thú bông sẽ được trao cho các em nhỏ được Operation Smile Việt Nam hỗ trợ khiến hoạt động này ý nghĩa hơn nhiều so với một bài lab thực hành thông thường.
 
-Hoạt động làm thú bông thông minh đặc biệt có giá trị vì được thiết kế để ai cũng có thể tham gia, kể cả khi chưa có kinh nghiệm kỹ thuật. Điều này nhắc tôi rằng một sản phẩm công nghệ tốt cần dễ sử dụng và được xây dựng xoay quanh người dùng.
+Hoạt động làm thú bông thông minh đặc biệt có giá trị vì được thiết kế để ai cũng có thể tham gia, kể cả khi chưa có kinh nghiệm kỹ thuật. Điều này nhắc em rằng một sản phẩm công nghệ tốt cần dễ sử dụng và được xây dựng xoay quanh người dùng.
 
-Tôi cũng rất thích được làm việc cùng nhân viên Amazon và các bạn FCAJ trong bầu không khí thoải mái, thân thiện, giúp mọi người dễ dàng trò chuyện và hỗ trợ lẫn nhau.
+Em cũng rất thích được làm việc cùng nhân viên Amazon và các bạn FCAJ trong bầu không khí thoải mái, thân thiện, giúp mọi người dễ dàng trò chuyện và hỗ trợ lẫn nhau.
 
-Nhìn chung, sự kiện giúp tôi hiểu rõ hơn văn hóa đóng góp cho cộng đồng của Amazon, đồng thời cho thấy tầm quan trọng của sự thấu cảm, tinh thần làm việc nhóm và việc sử dụng công nghệ vì lợi ích xã hội.
+Nhìn chung, sự kiện giúp em hiểu rõ hơn văn hóa đóng góp cho cộng đồng của Amazon, đồng thời cho thấy tầm quan trọng của sự thấu cảm, tinh thần làm việc nhóm và việc sử dụng công nghệ vì lợi ích xã hội.
 
 ### Một số hình ảnh sự kiện
 

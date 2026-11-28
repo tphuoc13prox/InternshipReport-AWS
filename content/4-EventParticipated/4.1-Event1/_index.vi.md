@@ -94,15 +94,15 @@ pre: " <b> 4.1. </b> "
 
 ### Trải nghiệm sự kiện
 
-Tham gia sự kiện "Buildrathon Kickoff: Code the Future with CMC Global" mang lại cho tôi cả kiến thức kỹ thuật lẫn trải nghiệm thực tế về Cloud và AI.
+Tham gia sự kiện "Buildrathon Kickoff: Code the Future with CMC Global" mang lại cho em cả kiến thức kỹ thuật lẫn trải nghiệm thực tế về Cloud và AI.
 
-Sự kiện giúp tôi hiểu rõ hơn cách AWS Cloud, Generative AI và AI Agent có thể được sử dụng để phát triển các giải pháp công nghệ thực tế. Phần giới thiệu Buildathon cũng giúp tôi thấy rõ hơn tầm quan trọng của việc biến kiến thức kỹ thuật thành sản phẩm thực tế.
+Sự kiện giúp em hiểu rõ hơn cách AWS Cloud, Generative AI và AI Agent có thể được sử dụng để phát triển các giải pháp công nghệ thực tế. Phần giới thiệu Buildathon cũng giúp em thấy rõ hơn tầm quan trọng của việc biến kiến thức kỹ thuật thành sản phẩm thực tế.
 
-Thử thách AI Agent đặc biệt có giá trị vì cho phép tôi áp dụng các khái niệm như prompt engineering, Retrieval-Augmented Generation (RAG) và knowledge base vào một tình huống thực tế. Điều này giúp tôi kết nối các khái niệm lý thuyết đã học trong chương trình FCAJ với một bài toán phát triển AI thực sự.
+Thử thách AI Agent đặc biệt có giá trị vì cho phép em áp dụng các khái niệm như prompt engineering, Retrieval-Augmented Generation (RAG) và knowledge base vào một tình huống thực tế. Điều này giúp em kết nối các khái niệm lý thuyết đã học trong chương trình FCAJ với một bài toán phát triển AI thực sự.
 
-Phần thảo luận về nghề nghiệp cũng mang lại những góc nhìn hữu ích về ngành Cloud và AI hiện nay, bao gồm các ứng dụng thực tế và cơ hội nghề nghiệp. Bên cạnh đó, các hoạt động giao lưu giúp tôi có cơ hội trò chuyện với những bạn FCAJ có cùng mối quan tâm về công nghệ.
+Phần thảo luận về nghề nghiệp cũng mang lại những góc nhìn hữu ích về ngành Cloud và AI hiện nay, bao gồm các ứng dụng thực tế và cơ hội nghề nghiệp. Bên cạnh đó, các hoạt động giao lưu giúp em có cơ hội trò chuyện với những bạn FCAJ có cùng mối quan tâm về công nghệ.
 
-Nhìn chung, sự kiện giúp tôi hiểu sâu hơn về AWS và việc phát triển AI hiện đại, đồng thời cho thấy tầm quan trọng của việc triển khai thực tế, làm việc nhóm và học hỏi liên tục trên con đường xây dựng sự nghiệp trong Cloud và AI.
+Nhìn chung, sự kiện giúp em hiểu sâu hơn về AWS và việc phát triển AI hiện đại, đồng thời cho thấy tầm quan trọng của việc triển khai thực tế, làm việc nhóm và học hỏi liên tục trên con đường xây dựng sự nghiệp trong Cloud và AI.
 
 ### Một số hình ảnh sự kiện
 

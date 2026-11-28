@@ -62,11 +62,11 @@ Kiến thức từ sự kiện có thể được áp dụng vào các dự án 
 
 ### Trải nghiệm sự kiện
 
-Theo dõi trực tiếp AWS Cloud and AI Day Hanoi tại buổi watch party ở TP.HCM giúp tôi tiếp cận những phát triển mới nhất trong điện toán đám mây và trí tuệ nhân tạo. Cùng các bạn thực tập sinh FCAJ xem các bài keynote và phiên kỹ thuật, tôi thấy rõ hơn cách kiến thức kỹ thuật gắn với ứng dụng thực tế. Các phiên về AI và hệ thống agentic đặc biệt phù hợp với xuất phát điểm của tôi là một sinh viên AI, và giúp tôi hiểu rõ hơn cách phát triển và triển khai giải pháp AI trên hạ tầng cloud.
+Theo dõi trực tiếp AWS Cloud and AI Day Hanoi tại buổi watch party ở TP.HCM giúp em tiếp cận những phát triển mới nhất trong điện toán đám mây và trí tuệ nhân tạo. Cùng các bạn thực tập sinh FCAJ xem các bài keynote và phiên kỹ thuật, em thấy rõ hơn cách kiến thức kỹ thuật gắn với ứng dụng thực tế. Các phiên về AI và hệ thống agentic đặc biệt phù hợp với xuất phát điểm của em là một sinh viên AI, và giúp em hiểu rõ hơn cách phát triển và triển khai giải pháp AI trên hạ tầng cloud.
 
 ### Một số hình ảnh sự kiện
 
-![Sự kiện 2 – ảnh check-in của tôi tại buổi watch party AWS Cloud and AI Day Hanoi ở TP.HCM](/images/4-Event/event2_checkin.jpg)
+![Sự kiện 2 – ảnh check-in của em tại buổi watch party AWS Cloud and AI Day Hanoi ở TP.HCM](/images/4-Event/event2_checkin.jpg)
 
 ![Sự kiện 2 – ảnh 1](/images/4-Event/event2_img1.jpg)
 

@@ -27,4 +27,4 @@ pre: " <b> 1.2. </b> "
 2. Dựng VPC với subnet, route table, Internet Gateway, NAT Gateway và bảo vệ bằng security group, network ACL.
 3. Chạy EC2 trong VPC và kết nối qua Session Manager, EC2 Instance Connect Endpoint.
 4. Thiết lập Site-to-Site VPN giữa AWS và mạng on-premises giả lập, xử lý sự cố VPN theo hướng dẫn của AWS.
-5. Họp team project lần đầu: thống nhất cách làm việc và thảo luận hướng dự báo giá hàng hóa. Thứ 7 ngày 26/09 tôi tham gia thêm buổi Buildathon kickoff (Sự kiện 1).
+5. Họp team project lần đầu: thống nhất cách làm việc và thảo luận hướng dự báo giá hàng hóa. Thứ 7 ngày 26/09 em tham gia thêm buổi Buildathon kickoff (Sự kiện 1).

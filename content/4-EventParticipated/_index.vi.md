@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 4. </b> "
 ---
 
-Trong thời gian thực tập, tôi đã tham gia năm sự kiện: buổi khởi động Buildathon kèm thử thách AI Agent, AWS Cloud and AI Day Hanoi, buổi Fireside Chat với CTO của Amazon – Dr. Werner Vogels, một hoạt động thiện nguyện của Amazon, và FCAJ x FPTU: Cloud Mastery 1 – buổi workshop về AI trên production và Amazon Bedrock AgentCore.
+Trong thời gian thực tập, em đã tham gia năm sự kiện: buổi khởi động Buildathon kèm thử thách AI Agent, AWS Cloud and AI Day Hanoi, buổi Fireside Chat với CTO của Amazon – Dr. Werner Vogels, một hoạt động thiện nguyện của Amazon, và FCAJ x FPTU: Cloud Mastery 1 – buổi workshop về AI trên production và Amazon Bedrock AgentCore.
 
 ---
 

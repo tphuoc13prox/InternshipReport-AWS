@@ -69,18 +69,18 @@ AI có thể đẩy nhanh đáng kể việc làm prototype và tự động hó
 
 ### Ứng dụng vào công việc
 
-Những bài học từ sự kiện có thể được áp dụng trực tiếp vào dự án FCAJ và quá trình học AWS của tôi:
+Những bài học từ sự kiện có thể được áp dụng trực tiếp vào dự án FCAJ và quá trình học AWS của em:
 
 - **Tư duy hệ thống:** Hiểu cách các dịch vụ AWS phối hợp với nhau thay vì học riêng lẻ từng dịch vụ. Ví dụ, một ứng dụng AWS hoàn chỉnh có thể bao gồm thu thập dữ liệu, lưu trữ, huấn luyện mô hình, suy luận (inference), giám sát và tương tác với người dùng.
-- **"Everything Fails All the Time":** Thiết kế ứng dụng với giả định sự cố sẽ xảy ra. Trong dự án của tôi, điều này có thể được áp dụng thông qua giám sát, xử lý lỗi, cô lập dịch vụ và dọn dẹp tài nguyên AWS đúng cách.
+- **"Everything Fails All the Time":** Thiết kế ứng dụng với giả định sự cố sẽ xảy ra. Trong dự án của em, điều này có thể được áp dụng thông qua giám sát, xử lý lỗi, cô lập dịch vụ và dọn dẹp tài nguyên AWS đúng cách.
 - **Renaissance Developer:** Mở rộng ra ngoài việc phát triển mô hình AI/ML, tìm hiểu thêm về hạ tầng cloud, cơ sở dữ liệu, bảo mật, kiến trúc hệ thống và giao tiếp.
-- **Sử dụng AI có trách nhiệm:** Công cụ AI giúp phát triển nhanh hơn, nhưng tôi vẫn cần kiểm tra code được tạo ra, hiểu cách nó hoạt động và chịu trách nhiệm cho hệ thống cuối cùng thay vì phụ thuộc mù quáng vào giải pháp do AI tạo ra.
+- **Sử dụng AI có trách nhiệm:** Công cụ AI giúp phát triển nhanh hơn, nhưng em vẫn cần kiểm tra code được tạo ra, hiểu cách nó hoạt động và chịu trách nhiệm cho hệ thống cuối cùng thay vì phụ thuộc mù quáng vào giải pháp do AI tạo ra.
 
 ### Trải nghiệm sự kiện
 
 Buổi Fireside Chat mang lại một góc nhìn giá trị về cách một tổ chức công nghệ lớn tiếp cận cloud và AI. Thay vì chỉ tập trung vào công cụ hay công nghệ cụ thể, buổi trò chuyện nhấn mạnh các nguyên tắc kỹ thuật, độ tin cậy của hệ thống, học hỏi liên tục và trách nhiệm của con người.
 
-Khái niệm Renaissance Developer đặc biệt phù hợp với quá trình phát triển của tôi với tư cách một sinh viên AI, vì nó cho thấy để trở thành một kỹ sư giỏi cần cả chiều sâu kỹ thuật lẫn hiểu biết rộng về nhiều lĩnh vực công nghệ khác nhau.
+Khái niệm Renaissance Developer đặc biệt phù hợp với quá trình phát triển của em với tư cách một sinh viên AI, vì nó cho thấy để trở thành một kỹ sư giỏi cần cả chiều sâu kỹ thuật lẫn hiểu biết rộng về nhiều lĩnh vực công nghệ khác nhau.
 
 ### Một số hình ảnh sự kiện
 

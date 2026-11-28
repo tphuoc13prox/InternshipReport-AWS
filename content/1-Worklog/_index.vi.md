@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 1. </b> "
 ---
 
-**Trong trang này** tôi trình bày nhật ký công việc của mình trong kỳ thực tập AWS First Cloud AI Journey, từ 14/09/2026 đến 30/11/2026 (ngày nộp báo cáo). Mỗi tuần gồm mục tiêu, các công việc theo từng ngày kèm tài liệu tham khảo và kết quả đạt được. Ngoài các module và lab của FCJ, nhật ký ghi lại phần việc của tôi trong dự án nhóm **CPAWS - dự báo giá hàng hóa**, nơi tôi phụ trách chatbot (Lambda /chat + Bedrock) và CI của repo. Phần việc của các thành viên khác chỉ được ghi dưới dạng họp nhóm hoặc review.
+**Trong trang này** em trình bày nhật ký công việc của mình trong kỳ thực tập AWS First Cloud AI Journey, từ 14/09/2026 đến 30/11/2026 (ngày nộp báo cáo). Mỗi tuần gồm mục tiêu, các công việc theo từng ngày kèm tài liệu tham khảo và kết quả đạt được. Ngoài các module và lab của FCJ, nhật ký ghi lại phần việc của em trong dự án nhóm **CPAWS - dự báo giá hàng hóa**, nơi em phụ trách chatbot (Lambda /chat + Bedrock) và CI của repo. Phần việc của các thành viên khác chỉ được ghi dưới dạng họp nhóm hoặc review.
 
 **Tuần 1:** [Làm quen chương trình, nền tảng AWS & thiết lập tài khoản](1.1-week1/)
 
