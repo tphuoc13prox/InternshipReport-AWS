@@ -29,3 +29,4 @@ pre: " <b> 1.9. </b> "
 3. Finished the Q&A script, the chatbot chapter with the v4 official result and the chatbot slides for the final presentation.
 4. Agreed with the team to run `baseline-q252` in production and keep DLinear as challenger.
 5. Built ECS, ALB, API Gateway, Lambda, S3 and nested stacks with AWS CDK.
+6. On Saturday 14/11 I also attended FCAJ x FPTU: Cloud Mastery 1, a workshop on AI in production and Amazon Bedrock AgentCore (Event 5).

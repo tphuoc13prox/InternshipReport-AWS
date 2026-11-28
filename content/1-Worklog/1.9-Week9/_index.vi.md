@@ -29,3 +29,4 @@ pre: " <b> 1.9. </b> "
 3. Hoàn thành kịch bản hỏi đáp, chương chatbot với kết quả chính thức của v4 và slide chatbot cho buổi thuyết trình cuối kỳ.
 4. Cùng nhóm chốt mốc `baseline-q252` cho production, DLinear giữ làm challenger.
 5. Dựng ECS, ALB, API Gateway, Lambda, S3 và nested stack bằng AWS CDK.
+6. Thứ 7 ngày 14/11 em tham gia thêm buổi FCAJ x FPTU: Cloud Mastery 1 về AI trên production và Amazon Bedrock AgentCore (Sự kiện 5).
