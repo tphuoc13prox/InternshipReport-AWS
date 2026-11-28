@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 1. </b> "
 ---
 
-**On this page** I present my worklog for the AWS First Cloud AI Journey internship, from 14/09/2026 to 30/11/2026 (the report submission day). Each week lists my objectives, the tasks I worked on each day with their references, and what I achieved. Besides the FCJ modules and labs, the worklog records my work on the team project **CPAWS - commodity price forecasting**, where I was responsible for the chatbot (the POST /chat Lambda with Amazon Bedrock) and the repository CI. Work done by other team members is only listed as team meetings or reviews.
+**On this page** I present my worklog for the AWS First Cloud AI Journey internship, from 14/09/2026 to 28/11/2026 (the report submission day). Each week lists my objectives, the tasks I worked on each day with their references, and what I achieved. Besides the FCJ modules and labs, the worklog records my work on the team project **CPAWS - commodity price forecasting**, where I was responsible for the chatbot (the POST /chat Lambda with Amazon Bedrock) and the repository CI. Work done by other team members is only listed as team meetings or reviews.
 
 **Week 1:** [Onboarding, AWS Fundamentals & Account Setup](1.1-week1/)
 
@@ -28,7 +28,5 @@ pre: " <b> 1. </b> "
 
 **Week 10:** [AWS Toolkit & Amazon Q, Chatbot Usage Limits & Demo News Refresh](1.10-week10/)
 
-**Week 11:** [Report Update after the FCAJ Notice, Review & Report Check](1.11-week11/)
-
-**Week 12:** [Final Check & Report Submission (30/11)](1.12-week12/)
+**Week 11:** [Report Update after the FCAJ Notice, Review & Report Submission (28/11)](1.11-week11/)
 

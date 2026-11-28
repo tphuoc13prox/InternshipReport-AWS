@@ -19,7 +19,7 @@ chapter: false
 
 &emsp; **Major:** Information Technology – Artificial Intelligence
 
-&emsp; **Class:** CPAWS
+&emsp; **Class:** FCAJ - FPT - Season 4
 
 &emsp; **Internship Company:** Amazon Web Services Viet Nam Company Limited
 

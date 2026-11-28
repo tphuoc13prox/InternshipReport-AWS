@@ -19,7 +19,7 @@ chapter: false
 
 &emsp; **Ngành:** Công nghệ thông tin – Chuyên ngành Trí tuệ nhân tạo
 
-&emsp; **Lớp:** CPAWS
+&emsp; **Lớp:** FCAJ - FPT - Season 4
 
 &emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Việt Nam
 
