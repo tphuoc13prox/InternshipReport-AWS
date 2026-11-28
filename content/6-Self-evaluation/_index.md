@@ -28,6 +28,21 @@ To look back on the internship as objectively as I can, I rate myself on the cri
 | 11  | **Contribution to project/team**    | Work effectiveness, innovative ideas, recognition from the team                                  | ✅    | ☐    | ☐       |
 | 12  | **Overall**                         | General evaluation of the entire internship period                                               | ✅    | ☐    | ☐       |
 
+### Strengths
+
+- **Seeing my part through to the end:** I took the chatbot from proposing the `POST /chat` contract to running it in production: a Lambda that calls Claude Haiku on Amazon Bedrock with tool use, a daily question limit, a hand-labelled Fed/EIA news set and benchmark sets to measure answer quality.
+- **Measuring before concluding:** Each time I changed the prompt or tried the router, I ran it on a question set locked in advance and compared it with a threshold set beforehand. When an idea missed its threshold, such as a router that sends simple questions to a smaller model or automatic news labelling with Bedrock, I recorded the result and chose a simpler approach instead of forcing it into the product.
+- **Keeping the shared repository healthy:** I set up CI that runs tests and lint on every pull request in the first weeks of the project, and I regularly reviewed my teammates' PRs, so many bugs were caught before merging.
+- **Writing documents for others:** I recorded the key decisions of the chatbot part in ADRs and repository docs, together with the demo script and the Q&A script, so my teammates could read them later and present on my behalf when needed.
+
 ### Needs Improvement
 
-* Build a stronger foundation in machine learning and statistics, especially time-series forecasting and how to evaluate a forecasting model, so I can follow and question the modelling side of a project instead of relying only on teammates
+- **Machine learning and statistics foundation.** I need a stronger grasp of time-series forecasting and how to evaluate a forecasting model, so I can follow and question the modelling side of a project instead of relying only on teammates.
+- **Testing with natural questions early.** Some chatbot bugs, such as missing a news item when the question names no asset, or news dates off by one day because of UTC, only showed up when the team tried the chatbot in production after the freeze. Next time I want to put the kinds of questions users actually ask into the test sets from the start.
+- **Splitting time between the project and learning.** In the last weeks I put most of my effort into the project and the report, so I learned little new material. I need a more even plan so I can keep building the product while still studying my weaker areas.
+
+### Reflection
+
+- Before the internship, I thought the hardest part of building a chatbot was choosing the model and writing the prompt. In practice, the most work went into measuring: whether an answer is right or wrong, how right it is, and how much each question costs.
+- I also understood better why a chatbot should get its numbers through tools instead of letting the model remember them. When the figures come from the system and the news comes with sources, users can check the answer, and the team can see where it went wrong and fix it.
+- Building a product that really runs on AWS made me think about cost from the design stage: every question costs tokens, so question limits, `maxTokens` and watching Cost Explorer matter as much as answer quality. I would like to thank the mentors, the FCAJ organizers and my CPAWS teammates for supporting me during these three months.
