@@ -97,7 +97,7 @@ The ideas below are **not done yet**. Each one needs a measurement before and af
 - Cut chatbot input tokens (less repeated context, tools return only the fields needed). A 20% cut in input tokens would save about 0.62 USD per month, or 12% of the estimate.
 - Retry the router that sends simple questions to Nova 2 Lite, and use it only if it meets the threshold on a new question set.
 - Re-measure the right memory size for each Lambda (256/512/1,024 MB) and consider ARM if the images and libraries support it.
-- One old log group still keeps logs for 2 years; bring it down to 1 month like the others.
+- One old log group created outside CDK still keeps logs for 2 years; bring it down to 1 month like the others.
 - Add 50/80/100% alert thresholds to the budget, to match the current low cost level.
 
 #### Review against AWS Well-Architected

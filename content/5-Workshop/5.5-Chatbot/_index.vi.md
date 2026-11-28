@@ -33,7 +33,7 @@ Chatbot giúp người dùng đọc dự báo bằng tiếng Việt: hỏi về 
 |---|---|
 | Model | Claude Haiku 4.5 qua inference profile **global** (cross-Region inference), gọi từ `ap-southeast-1` |
 | API | Converse (không stream), `temperature` 0, `maxTokens` 1500, `toolChoice: auto` |
-| Quyền IAM | Chỉ `bedrock:InvokeModel` trên đúng ARN của inference profile và model; `dynamodb:Query` trên bảng `forecasts` |
+| Quyền IAM | `bedrock:InvokeModel` cho Claude Haiku 4.5 và Nova 2 Lite (Nova đã được cấp cho router nhưng chưa dùng). Theo hướng dẫn global cross-Region inference, mỗi model có 3 statement: inference profile, model trong region và model global; hai statement sau chỉ có hiệu lực khi đi qua đúng inference profile (điều kiện `bedrock:InferenceProfileArn`). `dynamodb:Query` trên bảng `forecasts` và `news-labels`; `dynamodb:GetItem`, `dynamodb:UpdateItem` trên bảng `chat-usage` để đếm lượt hỏi |
 | Không dùng | Knowledge Bases, embedding, fine-tune. Tin tức đọc trực tiếp từ dữ liệu đã gắn nhãn |
 
 Dùng inference profile global thì Bedrock có thể xử lý request ở region khác. Nhóm ghi rõ trong ADR-0004 rằng không cam kết mọi request được xử lý hoàn toàn trong Singapore.
@@ -132,7 +132,7 @@ Nhóm **không bật Bedrock Guardrails** trong phạm vi đồ án (quyết đ�
 
 ![Hỏi tin tức](/images/5-Workshop/5.5-chat-forecast-news2.png)
 
-*Câu hỏi về tin Fed: trong 7 ngày gần nhất không có tin Fed đã gắn nhãn liên quan tới vàng, nên chatbot trả lời là không tìm thấy thay vì tự nghĩ ra tin.*
+*Câu hỏi về tin Fed: chatbot trả lời không tìm thấy tin Fed nào trong 7 ngày (17/11–24/11/2026). Thực ra bộ tin có biên bản FOMC đăng ngày 18/11 với mức tác động 2, nên đây là một lần bỏ sót; lỗi này được ghi ở mục "Hạn chế còn lại sau khi đóng băng" bên dưới.*
 
 ![Từ chối tư vấn](/images/5-Workshop/5.5-chat-refuse-advice.png)
 
@@ -147,6 +147,7 @@ Ngày 23–24/11/2026, nhóm hỏi thử chatbot trên Production với bản v1
 - **Hiểu sai hai đầu của khoảng 80% (q10/q90).** Chatbot coi chúng là mức sàn và mức trần, viết thành "giảm tối đa" hay "tăng tối đa". Thực ra giá vẫn có thể ra ngoài khoảng này.
 - **Tự thêm nhận định không có trong tin**, chẳng hạn "lãi suất cao làm vàng kém hấp dẫn vì chi phí cơ hội tăng".
 - **Ngày đăng tin lệch một ngày.** Câu trả lời ghi ngày theo giờ UTC, còn thẻ Nguồn trên web đổi sang giờ Việt Nam.
+- **Bỏ sót tin đã có trong bộ tin.** Với câu hỏi không nêu tài sản, như "Có tin gì mới của Fed không?", chatbot có lúc trả lời không tìm thấy, dù biên bản FOMC ngày 18/11 nằm trong khoảng 7 ngày và có mức tác động 2. Khi hỏi rõ tài sản và khoảng ngày, chatbot trả đúng tin này.
 
 Các lỗi nội dung trên đến từ prompt v2 đang chạy trên Lambda. Sau khi đóng băng, nhóm không sửa prompt hay code nữa mà chỉ ghi lại. Hướng cải tiến về sau:
 

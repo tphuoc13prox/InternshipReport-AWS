@@ -33,7 +33,7 @@ The chatbot helps users read the forecasts in Vietnamese: questions about gold, 
 |---|---|
 | Model | Claude Haiku 4.5 through the **global** inference profile (cross-Region inference), called from `ap-southeast-1` |
 | API | Converse (no streaming), `temperature` 0, `maxTokens` 1500, `toolChoice: auto` |
-| IAM permissions | Only `bedrock:InvokeModel` on the exact ARNs of the inference profile and model; `dynamodb:Query` on the `forecasts` table |
+| IAM permissions | `bedrock:InvokeModel` for Claude Haiku 4.5 and Nova 2 Lite (Nova is granted for the router but not used yet). Following the global cross-Region inference guide, each model has 3 statements: the inference profile, the in-Region model and the global model; the last two only apply when the call goes through that inference profile (condition `bedrock:InferenceProfileArn`). `dynamodb:Query` on the `forecasts` and `news-labels` tables; `dynamodb:GetItem` and `dynamodb:UpdateItem` on the `chat-usage` table to count questions |
 | Not used | Knowledge Bases, embeddings, fine-tuning. News is read directly from labelled data |
 
 With the global inference profile, Bedrock may process a request in another region. ADR-0004 states that the team does not guarantee every request is processed entirely in Singapore.
@@ -132,7 +132,7 @@ Screenshots taken on Production on 24/11/2026 (version v1.0.1). Account details,
 
 ![News question](/images/5-Workshop/5.5-chat-forecast-news2.png)
 
-*A question about Fed news: no labelled Fed item related to gold exists in the last 7 days, so the chatbot says it found none instead of making one up.*
+*A question about Fed news: the chatbot says it found no Fed news in the last 7 days (17/11–24/11/2026). The news set does contain the FOMC minutes published on 18/11 with impact level 2, so this is a miss; it is listed under "Remaining limitations after the freeze" below.*
 
 ![Refusing advice](/images/5-Workshop/5.5-chat-refuse-advice.png)
 
@@ -147,6 +147,7 @@ On 23–24/11/2026, the team tried the chatbot on Production with version v1.0.1
 - **It misreads the two ends of the 80% range (q10/q90).** The chatbot treats them as a floor and a ceiling and writes "falls at most" or "rises at most". In reality, the price can still move outside this range.
 - **It adds opinions that are not in the news**, such as "high interest rates make gold less attractive because the opportunity cost rises".
 - **News dates are off by one day.** The answer gives the date in UTC, while the Source card on the web app converts it to Vietnam time.
+- **It misses news that is in the set.** For a question that names no asset, such as "Is there any new Fed news?", the chatbot sometimes says it found nothing, even though the FOMC minutes of 18/11 fall within the 7 days and have impact level 2. When the question names the asset and the date range, the chatbot returns this item correctly.
 
 The content errors above come from prompt v2, which is running on the Lambda. After the freeze, the team stopped changing the prompt or the code and only recorded these issues. Future improvements:
 

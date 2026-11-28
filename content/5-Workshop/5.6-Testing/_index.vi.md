@@ -11,11 +11,10 @@ Mỗi push và pull request đều chạy:
 
 - **Python:** `ruff check`, `ruff format --check`, `pytest`. Trong đó có các test synth CDK (`tests/test_infra_*.py`) kiểm tra quyền IAM, biến môi trường, lịch Scheduler và alarm.
 - **Web:** `npm ci`, `typecheck`, `test`, `build`.
-- **Pre-commit:** `gitleaks`, `detect-aws-credentials`, để chặn key và Account ID trước khi đẩy lên repo public.
 
 CI **không deploy**. Nhánh `developer` cần ít nhất 1 approve mới merge được; nhánh `production` chỉ nhận PR release từ `developer`.
 
-Ở bản nộp (nhánh `production`, commit `ac1a31a`, nội dung giống `developer`): **pytest 1.658 test đạt, 2 test bỏ qua** (gồm các test synth CDK), **web 265 test đạt**, `ruff` không báo lỗi và CI xanh ở mọi PR trước khi merge.
+Ở bản nộp (nhánh `production`, commit `ac1a31a`; AWS đang chạy tag `v1.0.1` ở commit `ddfbfb3`, chỉ khác `ac1a31a` ở tài liệu và docstring): **pytest 1.658 test đạt, 2 test bỏ qua** (gồm các test synth CDK), **web 265 test đạt**, `ruff` không báo lỗi và CI xanh ở mọi PR trước khi merge.
 
 #### Kiểm thử sau mỗi lần deploy
 
@@ -66,15 +65,15 @@ Stack `CpawsOps` tạo 6 CloudWatch alarm. Alarm nào cũng báo khi có **≥ 1
 | `cpaws-dev-chat-api-errors` | Lambda chat timeout hoặc crash |
 | `cpaws-dev-chat-api-internal-errors` | Metric filter: handler chat trả `500` vì lỗi không lường trước |
 
-Mọi log group của Lambda giữ 1 tháng.
+6 log group của các Lambda do CDK tạo giữ log 1 tháng. Còn một log group cũ tạo ngoài CDK vẫn giữ 2 năm (xem mục 5.7).
 
 #### Độ tin cậy đo trên dữ liệu chạy thật
 
-Job `cpaws-dev-accuracy-job` chạy lúc 20:45 giờ Việt Nam, thứ Ba–thứ Bảy. Job so các dự báo đã phát hành với giá thật đã biết, rồi tính `coverage_80`, `width_80` và các chỉ số khác trong 8 tuần gần nhất. Khi chưa đủ 20 ngày cơ sở, web hiện "Đang thu thập (n/20)" thay cho con số. Lượt theo lịch đầu tiên chạy ngày 12/11/2026: 4/4 tài sản hoàn tất trong 30,3 giây, alarm ở trạng thái OK, mức 9/20. Đến lượt ngày 21/11/2026, lượt cuối trước khi đóng băng, cả 4 tài sản đã ở mức 16/20.
+Job `cpaws-dev-accuracy-job` chạy lúc 20:45 giờ Việt Nam, thứ Ba–thứ Bảy. Job so các dự báo đã phát hành với giá thật đã biết, rồi tính `coverage_80`, `width_80` và các chỉ số khác trong 8 tuần gần nhất. Khi chưa đủ 20 ngày cơ sở, web hiện "Đang thu thập (n/20)" thay cho con số. Lượt theo lịch đầu tiên chạy ngày 12/11/2026: 4/4 tài sản hoàn tất trong 30,3 giây, alarm ở trạng thái OK, mức 9/20. Đến lượt ngày 21/11/2026, lượt cuối trước khi đóng băng, cả 4 tài sản đã ở mức 16/20; lượt ngày 25/11/2026 lên 18/20, vẫn đang thu thập.
 
 #### Giới hạn còn lại
 
-- Alarm không phát hiện trường hợp lịch **không chạy**, vì khi không có dữ liệu thì alarm coi là bình thường. Hiện nhóm kiểm tay sau mỗi lượt 19:15. Hướng sửa: thêm alarm trên số lần gọi Lambda ingest, báo khi 3 ngày liên tiếp không có lần chạy nào.
+- Alarm không phát hiện trường hợp lịch **không chạy**, vì khi không có dữ liệu thì alarm coi là bình thường. Hướng sửa: thêm alarm trên số lần gọi Lambda ingest, báo khi 3 ngày liên tiếp không có lần chạy nào.
 - Chỉ có một môi trường `dev`, deploy tay từ một máy, chưa có staging.
 
 ![CloudWatch alarms](/images/5-Workshop/5.6-alarms.png)

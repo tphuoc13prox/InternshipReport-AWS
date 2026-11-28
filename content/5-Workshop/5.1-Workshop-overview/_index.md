@@ -29,7 +29,7 @@ The model currently published (`baseline-q252`) is a **252-session statistical b
 
 ![CPAWS current architecture](/images/5-Workshop/CPAWS-architecture-current.png)
 
-*Diagram drawn by the CPAWS team in draw.io (layout revised by Khải on 17/11/2026), state as of 13/11/2026. Every component on the diagram is deployed and running.*
+*Diagram drawn by the CPAWS team in draw.io (layout revised by Khải on 17/11/2026). Every component on the diagram is deployed and running.*
 
 The system has three flows:
 
@@ -63,7 +63,7 @@ During the project the architecture was simplified relative to the [proposal](..
 |---|---|---|
 | Step Functions and SageMaker AI for weekly retraining | Two Lambdas chained by a destination, no retraining | The 252-session baseline needs no model artifact; ML models did not beat it (ADR-0011, ADR-0012) |
 | Secrets Manager | SSM Parameter Store `SecureString` | Only one key, no automatic rotation needed; cost close to zero |
-| News labelling with Bedrock (Nova 2 Lite) | 2–3 Fed/EIA releases labelled by hand each week | The check on 49 real releases missed its thresholds (ADR-0013) |
+| News labelling with Bedrock (Nova 2 Lite) | Fed/EIA releases were labelled by hand only during development; the product is frozen, so the news set is no longer updated | The check on 49 real releases missed its thresholds (ADR-0013) |
 | Router choosing between Nova and Haiku | Every question goes to Claude Haiku 4.5 | The router missed its threshold on a held-out question set (section [5.5](../5.5-chatbot/)) |
 | Bedrock Guardrails, Knowledge Bases | Not enabled | Controlled with prompt rules, tools and server-side checks (decision of 11/11/2026) |
 

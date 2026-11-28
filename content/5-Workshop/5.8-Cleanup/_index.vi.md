@@ -67,7 +67,6 @@ aws ssm delete-parameter --name /cpaws/dev/eia-api-key --profile cpaws-dev
 ```
 
 - Xóa app `cpaws-dev-web` trong Amplify Console.
-- Xóa SNS topic `cpaws-dev-alarms` và subscription email nếu còn.
 - Nếu tài khoản còn dùng chung cho việc khác, không xóa bucket, repo và tham số của CDK bootstrap, cũng không đụng tới các KMS key do AWS quản lý.
 - Giữ AWS Budgets thêm vài ngày để theo dõi xem còn phát sinh chi phí không, rồi mới xóa.
 
@@ -75,5 +74,6 @@ aws ssm delete-parameter --name /cpaws/dev/eia-api-key --profile cpaws-dev
 
 - CloudFormation không còn stack `Cpaws*`. Stack `CDKToolkit` của bootstrap chỉ xóa nếu không còn dùng CDK trong tài khoản.
 - Không còn bucket, bảng DynamoDB, User Pool hay log group nào của dự án.
+- SNS topic `cpaws-dev-alarms` do stack `CpawsOps` tạo nên đã bị xóa cùng stack; chỉ cần kiểm tra lại trong SNS Console.
 - Xem AWS Billing và Cost Explorer vào ngày hôm sau và sau kỳ hóa đơn kế tiếp. Số liệu billing có độ trễ, nên chi phí không về 0 ngay.
 - Ghi lại danh sách tài nguyên cố ý giữ lại, lý do và người phụ trách.

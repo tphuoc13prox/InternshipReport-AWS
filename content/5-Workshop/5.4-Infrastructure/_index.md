@@ -32,7 +32,7 @@ Image tags (`ingest_image_tag`, `predict_image_tag`) and the model version are r
 
 - **No resources billed by the hour:** no inference endpoint, no NAT Gateway, no OpenSearch.
 - **No Lambda runs inside a VPC.** Ingest calls Yahoo and EIA over the public internet, so no NAT Gateway is needed.
-- **Each Lambda has its own least-privilege IAM role.** For example, ingest may only read and write `raw/*` and `clean/*`, and may only call `ssm:GetParameter` on one parameter; the Scheduler may only call `lambda:InvokeFunction` on the ingest function.
+- **Each Lambda has its own least-privilege IAM role.** For example, ingest only has `s3:GetObject` and `s3:PutObject` on `raw/*` and `clean/*`, `s3:ListBucket` limited to these two prefixes, `ssm:GetParameter` on one parameter, logging through the managed policy `AWSLambdaBasicExecutionRole`, and permission to invoke the predict Lambda through Lambda Destinations; the Scheduler may only call `lambda:InvokeFunction` on the ingest function.
 - **Tag every resource** with `Project`, `Owner`, `Env` to filter cost.
 - **IAM and infrastructure changes go through a Pull Request**, reviewed by the security owner before merge. Deploy only merged commits. Until 17/11/2026 the team deployed from branch `developer`; the submitted version is deployed from branch `production` after a release PR and a tag (`v1.0.0` on 22/11, `v1.0.1` on 23/11/2026). Fixes land on `developer` first and ship with the next release.
 - **CI does not deploy.** GitHub holds no AWS permissions; deployments are run by hand from the infrastructure owner's machine, one stack at a time.

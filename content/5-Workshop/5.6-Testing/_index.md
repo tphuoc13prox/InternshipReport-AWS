@@ -11,11 +11,10 @@ Every push and pull request runs:
 
 - **Python:** `ruff check`, `ruff format --check`, `pytest`. This includes CDK synth tests (`tests/test_infra_*.py`) that check IAM permissions, environment variables, Scheduler schedules and alarms.
 - **Web:** `npm ci`, `typecheck`, `test`, `build`.
-- **Pre-commit:** `gitleaks`, `detect-aws-credentials`, to block keys and Account IDs before they reach the public repository.
 
 CI **does not deploy**. Branch `developer` needs at least 1 approval to merge; branch `production` only accepts release PRs from `developer`.
 
-In the submitted version (branch `production`, commit `ac1a31a`, same content as `developer`): **pytest 1,658 tests passed, 2 skipped** (including the CDK synth tests), **web 265 tests passed**, `ruff` reports no issues, and CI was green on every PR before merge.
+In the submitted version (branch `production`, commit `ac1a31a`; AWS runs tag `v1.0.1` at commit `ddfbfb3`, which differs from `ac1a31a` only in documentation and docstrings): **pytest 1,658 tests passed, 2 skipped** (including the CDK synth tests), **web 265 tests passed**, `ruff` reports no issues, and CI was green on every PR before merge.
 
 #### Tests after each deployment
 
@@ -66,15 +65,15 @@ Stack `CpawsOps` creates 6 CloudWatch alarms. Each fires on **≥ 1 error in 5 m
 | `cpaws-dev-chat-api-errors` | Chat Lambda timeout or crash |
 | `cpaws-dev-chat-api-internal-errors` | Metric filter: the chat handler returned `500` because of an unexpected error |
 
-All Lambda log groups keep logs for 1 month.
+The 6 Lambda log groups created by CDK keep logs for 1 month. One old log group created outside CDK still keeps logs for 2 years (see section 5.7).
 
 #### Reliability measured on live data
 
-Job `cpaws-dev-accuracy-job` runs at 20:45 Vietnam time, Tuesday–Saturday. It compares published forecasts with realized prices now known and computes `coverage_80`, `width_80` and the other metrics over the last 8 weeks. Until there are 20 base dates, the web app shows "Đang thu thập (n/20)" ("Collecting") instead of numbers. The first scheduled run took place on 12/11/2026: 4/4 assets completed in 30.3 seconds, the alarm stayed OK, at level 9/20. By the run of 21/11/2026, the last one before the freeze, all 4 assets were at 16/20.
+Job `cpaws-dev-accuracy-job` runs at 20:45 Vietnam time, Tuesday–Saturday. It compares published forecasts with realized prices now known and computes `coverage_80`, `width_80` and the other metrics over the last 8 weeks. Until there are 20 base dates, the web app shows "Đang thu thập (n/20)" ("Collecting") instead of numbers. The first scheduled run took place on 12/11/2026: 4/4 assets completed in 30.3 seconds, the alarm stayed OK, at level 9/20. By the run of 21/11/2026, the last one before the freeze, all 4 assets were at 16/20; the run of 25/11/2026 reached 18/20, still collecting.
 
 #### Remaining limitations
 
-- The alarms cannot detect a schedule that **did not run**, because missing data is treated as normal. For now the team checks by hand after each 19:15 run. Planned fix: an alarm on the ingest Lambda's invocation count that fires when there is no run for 3 days in a row.
+- The alarms cannot detect a schedule that **did not run**, because missing data is treated as normal. Planned fix: an alarm on the ingest Lambda's invocation count that fires when there is no run for 3 days in a row.
 - There is only one `dev` environment, deployed by hand from one machine, with no staging.
 
 ![CloudWatch alarms](/images/5-Workshop/5.6-alarms.png)

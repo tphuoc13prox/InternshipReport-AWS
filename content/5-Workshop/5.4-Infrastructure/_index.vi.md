@@ -32,7 +32,7 @@ Tag image (`ingest_image_tag`, `predict_image_tag`) và phiên bản mô hình �
 
 - **Không có tài nguyên tính tiền theo giờ:** không endpoint suy luận, không NAT Gateway, không OpenSearch.
 - **Không Lambda nào chạy trong VPC.** Ingest gọi Yahoo và EIA qua Internet công cộng, nên không cần NAT Gateway.
-- **Mỗi Lambda có IAM role riêng với quyền tối thiểu.** Ví dụ: ingest chỉ được đọc và ghi `raw/*`, `clean/*` và chỉ được `ssm:GetParameter` đúng một tham số; Scheduler chỉ được `lambda:InvokeFunction` đúng hàm ingest.
+- **Mỗi Lambda có IAM role riêng với quyền tối thiểu.** Ví dụ: ingest chỉ được `s3:GetObject`, `s3:PutObject` trên `raw/*` và `clean/*`, `s3:ListBucket` giới hạn ở hai prefix này, `ssm:GetParameter` đúng một tham số, ghi log qua managed policy `AWSLambdaBasicExecutionRole` và gọi Lambda predict qua Lambda Destinations; Scheduler chỉ được `lambda:InvokeFunction` đúng hàm ingest.
 - **Gắn tag `Project`, `Owner`, `Env`** cho mọi tài nguyên để lọc chi phí.
 - **Thay đổi IAM và hạ tầng phải qua Pull Request** và có người phụ trách bảo mật review trước khi merge. Chỉ deploy commit đã merge. Đến ngày 17/11/2026 nhóm deploy từ nhánh `developer`; bản nộp được deploy từ nhánh `production` sau PR release và tag (`v1.0.0` ngày 22/11, `v1.0.1` ngày 23/11/2026). Lỗi được sửa ở `developer` trước, rồi mới release bản tiếp theo.
 - **CI không deploy.** GitHub không giữ quyền AWS; deploy chạy tay từ máy của người phụ trách hạ tầng, mỗi lần một stack.

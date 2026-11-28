@@ -20,7 +20,7 @@ REST API stage `dev`, định nghĩa trong `infra/stacks/cpaws_api_stack.py`. H�
 - **Xác thực:** mọi route trừ `/health` dùng **Cognito authorizer**. Client gửi ID token trong header `Authorization`.
 - **Throttling** ở mức stage: 10 request/giây, burst 20.
 - **CORS** chỉ cho phép **một** origin, truyền bằng `-c allowed_origin`. Giá trị này được dùng ở ba chỗ: preflight `OPTIONS`, header do Lambda trả về, và `GatewayResponse` cho lỗi 4xx/5xx (để trình duyệt vẫn đọc được mã 401, 429, 504).
-- **Mỗi Lambda chỉ có quyền đọc bảng mình cần.** Ví dụ, `forecasts-api` chỉ được `dynamodb:Query` trên bảng `forecasts` và `s3:GetObject` trên đúng prefix `serving/price-history/*`.
+- **Mỗi Lambda chỉ có quyền trên đúng bảng mình cần:** `forecasts-api` được `dynamodb:Query` trên bảng `forecasts` và `s3:GetObject` trên đúng prefix `serving/price-history/*`; `accuracy-api` được `dynamodb:GetItem`, `dynamodb:Query` trên bảng `accuracy`; `chat-api` được đọc `forecasts`, `news-labels` và cập nhật bộ đếm trong bảng `chat-usage` (chi tiết ở mục 5.5).
 
 #### Lịch sử giá 2 năm (`?history=`)
 

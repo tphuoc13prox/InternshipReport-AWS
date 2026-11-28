@@ -20,7 +20,7 @@ REST API stage `dev`, defined in `infra/stacks/cpaws_api_stack.py`. The detailed
 - **Authentication:** every route except `/health` uses a **Cognito authorizer**. The client sends the ID token in the `Authorization` header.
 - **Throttling** at stage level: 10 requests/second, burst 20.
 - **CORS** allows **one** origin, passed with `-c allowed_origin`. The value is used in three places: the `OPTIONS` preflight, the headers returned by the Lambdas, and the `GatewayResponse` for 4xx/5xx errors (so the browser can still read 401, 429 and 504 codes).
-- **Each Lambda can only read the table it needs.** For example, `forecasts-api` only has `dynamodb:Query` on the `forecasts` table and `s3:GetObject` on exactly the `serving/price-history/*` prefix.
+- **Each Lambda only has rights on the tables it needs:** `forecasts-api` has `dynamodb:Query` on the `forecasts` table and `s3:GetObject` on exactly the `serving/price-history/*` prefix; `accuracy-api` has `dynamodb:GetItem` and `dynamodb:Query` on the `accuracy` table; `chat-api` can read `forecasts` and `news-labels` and update the counter in the `chat-usage` table (details in section 5.5).
 
 #### Two years of price history (`?history=`)
 
